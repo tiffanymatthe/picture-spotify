@@ -1,6 +1,11 @@
 import os
 from datetime import datetime
 
+import sys
+import web_app.process_image as primg
+
+import cv2
+import numpy as np
 from flask import Flask, flash, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
 
@@ -48,14 +53,19 @@ def home():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        filetype = type(file) # fileStorage type. Need to convert to color array
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            filestr = file.read()
+            npimg = np.fromstring(filestr, np.uint8)
+            img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
+            primg.get_playlist(img)
             # this need to change to sending file to python module and spitting out playlist
-            filename = secure_filename(file.filename)
+            # filename = secure_filename(file.filename)
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('uploaded_file',
             # filename=filename))
