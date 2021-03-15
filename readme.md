@@ -22,6 +22,3 @@
 - [ ] Make POST redirect to correct page and show playlist. (TM)
 - [ ] Create interface with Bulma. (TM)
 - [ ] Deploy as a Heroku app. (JM)
-
-
-Helloe testst

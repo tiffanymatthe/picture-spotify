@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import web_app.colours_genre as cg
 
 # add color-genre dictionary as a constant here
 COLOUR_GENRE = {
@@ -26,7 +25,7 @@ def get_playlist(img: np.ndarray):
     img = np.zeros((height,width,3), np.uint8) # white image
     colour_array = get_colour_array(img)
     playlist_size = 10
-    return colours_to_playlist(colour_array, 10)
+    return colours_to_playlist(colour_array, playlist_size)
 
 def get_colour_array(img: np.ndarray) -> dict[str, float]:
     """Converts an image array with rgb values to a dictionary of discrete colors.
@@ -41,10 +40,13 @@ def get_colour_array(img: np.ndarray) -> dict[str, float]:
     dict[str, float]
         a dictionary of colour keys where their values represent the percent composition seen in the image.
     """
-    return {
-        "red": 0.1,
+    red_percentage = 0.1
+
+    diction = {
+        "red": red_percentage,
         "blue": 0.9
     }
+    return diction
 
 def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     """Converts a dictionary of weighted colours to a spotify playlist.
