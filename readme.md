@@ -11,3 +11,13 @@
 7. View website at http://127.0.0.1:5000/.
 
 - For better development, create a code snippet by following the steps [here](https://code.visualstudio.com/docs/python/tutorial-flask#_create-multiple-templates-that-extend-a-base-template).
+
+## To Do List
+- [ ] Extract discrete colour composition from a photo.
+- [ ] Show a playlist with ability to save after submitting photo.
+- [ ] Create playlist with Spotipy.
+- [ ] Add ability to login in to Spotify when user wants to save playlist.
+- [ ] Extract random song in genre associated with colour.
+- [ ] Make POST redirect to correct page and show playlist.
+- [ ] Create interface with Bulma.
+- [ ] Deploy as a Heroku app.
