@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import web_app.colours_genre as cg
 
 # add color-genre dictionary as a constant here
 COLOUR_GENRE = {
