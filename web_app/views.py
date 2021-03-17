@@ -1,16 +1,25 @@
 import os
-from datetime import datetime
-
 import sys
-import web_app.process_image as primg
+from datetime import datetime
 
 import cv2
 import numpy as np
+import spotipy
 from flask import Flask, flash, redirect, render_template, request, url_for
+from spotipy import oauth2
 from werkzeug.utils import secure_filename
+
+import web_app.process_image as primg
 
 from . import app
 
+SPOTIPY_CLIENT_ID = '***REMOVED***'
+SPOTIPY_CLIENT_SECRET = '***REMOVED***'
+SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:5000/connect'
+SCOPE = 'playlist-modify-private'
+CACHE = '.spotipyoauthcache'
+
+sp_oauth = oauth2.SpotifyOAuth( SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET,SPOTIPY_REDIRECT_URI,scope=SCOPE,cache_path=CACHE )
 
 @app.route("/about/")
 def about():
@@ -44,6 +53,53 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/playlist')
+def playlist():
+        results = sp.current_user_saved_tracks()
+        for idx, item in enumerate(results['items']):
+            track = item['track']
+            print(idx, track['artists'][0]['name'], " – ", track['name'])
+        return render_template("playlist.html")
+
+@app.route('/connect', methods=['GET', 'POST'])
+def connect():
+    access_token = ""
+    token_info = sp_oauth.get_cached_token()
+
+    if token_info:
+        print("Found cached token!")
+        access_token = token_info['access_token']
+    else:
+        url = request.url
+        code = sp_oauth.parse_response_code(url)
+        if code and code != "http://127.0.0.1:5000/connect":
+            print("Found Spotify auth code in Request URL! Trying to get valid access token...")
+            token_info = sp_oauth.get_access_token(code)
+            access_token = token_info['access_token']
+
+    if access_token:
+        print("Access token available! Trying to get user information...")
+        sp = spotipy.Spotify(access_token)
+        # results = sp.current_user()
+        return sp.current_user_playlists()
+    else:
+        return htmlForLoginButton()
+    
+
+def htmlForLoginButton():
+    auth_url = getSPOauthURI()
+    htmlLoginButton = "<a href='" + auth_url + "'>Login to Spotify</a>"
+    return htmlLoginButton
+
+def getSPOauthURI():
+    auth_url = sp_oauth.get_authorize_url()
+    return auth_url
+
+    scope = "playlist-modify-private"
+    if request.method == 'POST':
+        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+
+    return render_template("connect.html")
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
