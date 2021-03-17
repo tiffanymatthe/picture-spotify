@@ -10,11 +10,13 @@
 6. `cd web_app` to go into web_app folder and run `python -m flask run` in Integrated Terminal.
 7. View website at http://127.0.0.1:5000/.
 
+- If a module is added, rerun `pip freeze > requirements.txt` to update for other users.
+- To debug, use F5.
 - For better development, create a code snippet by following the steps [here](https://code.visualstudio.com/docs/python/tutorial-flask#_create-multiple-templates-that-extend-a-base-template).
 
 ## To Do List
 - [x] Create barebones Flask app. (TM)
-- [ ] Extract discrete colour composition from a photo. (JM)
+- [x] Extract discrete colour composition from a photo. (JM)
 - [ ] Show a playlist with ability to save after submitting photo. (TM)
 - [ ] Create playlist with Spotipy. (JM)
 - [ ] Add ability to login in to Spotify when user wants to save playlist. (TM)
