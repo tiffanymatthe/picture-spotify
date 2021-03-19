@@ -128,10 +128,21 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     -------
     unknown type! Need to find out.
         a playlist representing the color distribution.
-    """
-    return 0
-
+        
 
 img = np.zeros((10,5,3), np.uint8)
 get_colour_array(img)
 print("Hello")
+    """
+    return 0
+
+
+result = sp.search("Post Malone")
+track = result['tracks']['items'][0]
+
+artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
+print("artist genres:", artist["genres"])
+
+album = sp.album(track["album"]["external_urls"]["spotify"])
+print("album genres:", album["genres"])
+print("album release-date:", album["release_date"])
