@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import sys
 
 import spotipy
 import os
@@ -143,20 +144,55 @@ print("Hello")
     return 0
 
 
-# Shows the top artists for a user
+# shows artist info for a URN or URL
+
+from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+import sys
+import pprint
 
-scope = 'user-top-read'
-ranges = ['short_term', 'medium_term', 'long_term']
+search_str = 'post_malone'
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-for sp_range in ['short_term', 'medium_term', 'long_term']:
-    print("range:", sp_range)
+"""
+result = sp.search(search_str)
+for i, t in enumerate(result['tracks']['items']):
+    print(' ', i, t['id'])
 
-    results = sp.current_user_top_artists(time_range=sp_range, limit=50)
+for key, value in result['albums'].items():
+    print(key)
+   
+result = sp.new_releases()
+for i, t in enumerate(result['albums']['items']):
+    print(' ', i, t['id'])
+    tracks = sp.album_tracks(t['id'],limit=1)
+    print(tracks)
+"""
+def getAlbumsTracks(self, id=5dGWwsZ9iB2Xc3UKR0gif2):
 
-    for i, item in enumerate(results['items']):
-        print(i, item['name'])
-    print()
+            tracks = self.__client.album_tracks(
+                album_id=id,
+                limit=50
+            )['items']
+
+            return [
+                {
+                    'trc_name':track['name'],
+                    'trc_uri':track['uri'],
+                    'trc_spotify':track['external_urls']['spotify'],
+                    'trc_id':track['id'],
+                    'trc_preview':track['preview_url'],
+                    'art_name':track['artists'][0]['name'],
+                    'art_uri':track['artists'][0]['uri'],
+                    'art_spotify':track['artists'][0]['external_urls']['spotify'],
+                    'art_id':track['artists'][0]['id']
+                }
+
+                for track in tracks 
+
+            ]
+
+result = sp.new_releases()
+for i, t in enumerate(result['albums']['items']):
+    print(' ', i, t['id'])
