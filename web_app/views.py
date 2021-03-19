@@ -1,11 +1,15 @@
 import os
+import secrets
 import sys
 from datetime import datetime
+from urllib.parse import urlencode
+import string
 
 import cv2
 import numpy as np
 import spotipy
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import (Flask, flash, make_response, redirect, render_template,
+                   request, url_for)
 from spotipy import oauth2
 from werkzeug.utils import secure_filename
 
@@ -13,13 +17,27 @@ import web_app.process_image as primg
 
 from . import app
 
-SPOTIPY_CLIENT_ID = '***REMOVED***'
-SPOTIPY_CLIENT_SECRET = '***REMOVED***'
-SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:5000/connect'
-SCOPE = 'playlist-modify-private'
-CACHE = '.spotipyoauthcache'
+"""
+# Client info
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+REDIRECT_URI = os.getenv('REDIRECT_URI')
+"""
 
-sp_oauth = oauth2.SpotifyOAuth( SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET,SPOTIPY_REDIRECT_URI,scope=SCOPE,cache_path=CACHE )
+#SPOTIPY_CLIENT_ID = '***REMOVED***'
+#SPOTIPY_CLIENT_SECRET = '***REMOVED***'
+#SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:5000/connect'
+SCOPE = 'playlist-modify-private'
+
+# Client info
+CLIENT_ID = "***REMOVED***"
+REDIRECT_URI = 'http://127.0.0.1:5000/connect'
+
+# Spotify API endpoints
+AUTH_URL = 'https://accounts.spotify.com/authorize'
+SEARCH_ENDPOINT = 'https://api.spotify.com/v1/search'
+
+#sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET,SPOTIPY_REDIRECT_URI,scope=SCOPE,cache_path=CACHE )
 
 @app.route("/about/")
 def about():
@@ -30,6 +48,36 @@ def about():
 def contact():
     return render_template("contact.html")
 
+
+@app.route("/auth/")
+def auth():
+    state = ''.join(
+        secrets.choice(string.ascii_uppercase + string.digits) for _ in range(16)
+    )
+
+    # Request authorization from user
+    # Only including `state` here for error logging purposes.
+    payload = {
+        'client_id': CLIENT_ID,
+        'response_type': 'token',
+        'redirect_uri': REDIRECT_URI,
+        'scope': 'user-read-private user-read-email',
+        'state': state,
+    }
+
+    res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
+
+    return res
+
+@app.route('/connect')
+def connect():
+    error = request.args.get('error')
+    state = request.args.get('state')
+
+    if error:
+        print("ERROR")
+
+    return render_template('connect.html')
 
 @app.route("/hello/")
 @app.route("/hello/<name>")
@@ -61,6 +109,7 @@ def playlist():
             print(idx, track['artists'][0]['name'], " – ", track['name'])
         return render_template("playlist.html")
 
+"""
 @app.route('/connect', methods=['GET', 'POST'])
 def connect():
     access_token = ""
@@ -69,6 +118,9 @@ def connect():
     if token_info:
         print("Found cached token!")
         access_token = token_info['access_token']
+        if sp_oauth.is_token_expired(token_info):
+            token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+            access_token = token_info['access_token']
     else:
         url = request.url
         code = sp_oauth.parse_response_code(url)
@@ -100,6 +152,7 @@ def getSPOauthURI():
         sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
     return render_template("connect.html")
+"""
 
 @app.route('/', methods=['GET', 'POST'])
 def home():

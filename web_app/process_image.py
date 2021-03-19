@@ -112,7 +112,7 @@ def get_colour_array(img: np.ndarray):
     }
 
     print(colour_dict)
-    return diction
+    return colour_dict
 
 def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     """Converts a dictionary of weighted colours to a spotify playlist.
@@ -130,3 +130,8 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
         a playlist representing the color distribution.
     """
     return 0
+
+
+img = np.zeros((10,5,3), np.uint8)
+get_colour_array(img)
+print("Hello")
