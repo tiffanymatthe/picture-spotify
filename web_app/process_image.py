@@ -134,15 +134,29 @@ img = np.zeros((10,5,3), np.uint8)
 get_colour_array(img)
 print("Hello")
     """
+    # search for top 3 songs of each artist on spotify
+    # classify the tracks under their respective genres
+    # this gives me a database of some kind of songs
+    # then I assign each colour percentage to a proportion of songs
+    # randomly select songs from database based on percentages
+    # return a playlist song list
     return 0
 
 
-result = sp.search("Post Malone")
-track = result['tracks']['items'][0]
+# Shows the top artists for a user
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
-artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
-print("artist genres:", artist["genres"])
+scope = 'user-top-read'
+ranges = ['short_term', 'medium_term', 'long_term']
 
-album = sp.album(track["album"]["external_urls"]["spotify"])
-print("album genres:", album["genres"])
-print("album release-date:", album["release_date"])
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+
+for sp_range in ['short_term', 'medium_term', 'long_term']:
+    print("range:", sp_range)
+
+    results = sp.current_user_top_artists(time_range=sp_range, limit=50)
+
+    for i, item in enumerate(results['items']):
+        print(i, item['name'])
+    print()
