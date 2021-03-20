@@ -104,7 +104,11 @@ def connect():
         print("ERROR")
     # https://stackoverflow.com/questions/53566536/python-get-url-fragment-identifier-with-flask
 
-    return render_template("add_playlist_result.html", song_title = request.args.to_dict())
+    artist_track = {
+        'artist_name': 'artist_track'
+    }
+
+    return render_template("add_playlist_result.html", artist_track=artist_track)
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
