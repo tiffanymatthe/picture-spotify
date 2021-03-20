@@ -12,6 +12,10 @@ https://github.com/spotify/web-api-auth-examples
 <div id="oauth">
 </div>
 
+{% for artist, track in artist_track.items() %}
+{{ artist }} : {{ track }}
+{% endfor %}
+
 {% raw %}
 <script id="user-profile-template" type="text/x-handlebars-template">
   <h2>Logged in as {{display_name}}</h2>
