@@ -76,10 +76,6 @@ https://github.com/spotify/web-api-auth-examples
         var response = JSON.parse(this.responseText)
         console.log(response)
         userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-        var dict = {{ artist_track|tojson }};
-        for (var artist in dict) {
-          console.log(artist, dict[artist]);
-        }
         //createPlaylist(response.id);
       }
     }
@@ -100,9 +96,9 @@ https://github.com/spotify/web-api-auth-examples
         console.log(response);
         var dict = {{ artist_track|tojson }};
         for (var artist in dict) {
-          console.log(artist, dict[artist]);
+          console.log(artist, dict[artist], response.id);
+          addTrack(artist, dict[artist], response.id);
         }
-        addTrack("Justin", "Baby");
       }
     }
 
@@ -121,10 +117,37 @@ https://github.com/spotify/web-api-auth-examples
     xhttp.send(body);
   }
 
-  function addTrack(artist, track) {
+  function addTrack(artist, track, playlist_id) {
     var type = "track";
-    var q = "?q=artist:queen%20track:bohemian%20rhapsody&type=track";
-    // var q = "?query=" + track + "%" + artist + "&type=" + type +"&limit=10";
+    var artistURI = encodeURI(artist);
+    var trackURI = encodeURI(track);
+    var endpoint = "https://api.spotify.com/v1/playlists/{playlist_id}/tracks";
+
+    var xhttp = new XMLHttpRequest();
+    var track_id = 0;
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = JSON.parse(this.responseText)
+        track_id = response.id
+        console.log("Track id?" + track_id)
+        console.log(response)
+      }
+    }
+
+    var request_url = "https://api.spotify.com/v1/playlists/" + playlist_id + "/tracks";
+    console.log(request_url);
+    xhttp.open('PUT', request_url, true);
+    xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    console.log(xhttp);
+    var params = {
+      "uris":"spotify:track:" + track_id
+    };
+    body = JSON.stringify(params);
+    xhttp.send(body);
+
+    /*
+    var q = "?q=artist:" + artistURI + "%20track:" + trackURI + "&type=track";
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -140,6 +163,7 @@ https://github.com/spotify/web-api-auth-examples
     xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token);
     console.log(xhttp);
     xhttp.send();
+    */
   }
 
   // Handlebars templates
