@@ -27,7 +27,7 @@ def home():
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             # first go to authorization, which will redirect to playlist success message
-            return render_template("home.html", success="success")
+            return redirect(url_for('auth'))
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -49,7 +49,7 @@ def home():
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('uploaded_file',
             # filename=filename))
-            return redirect(url_for('auth'))
+            return render_template("home.html", artist_track=artist_track)
     return render_template("home.html")
 
 @app.route("/about/")
@@ -84,6 +84,7 @@ def auth():
 
 @app.route('/add_playlist_result')
 def connect():
+    # instead of this, redirect to home but check if no errors, then print success
     error = request.args.get('error')
     state = request.args.get('state')
 
@@ -95,7 +96,7 @@ def connect():
         'artist_name': 'artist_track'
     }
 
-    return render_template("add_playlist_result.html", artist_track=artist_track)
+    return render_template("home.html", success="success")
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
