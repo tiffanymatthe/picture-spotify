@@ -14,6 +14,8 @@ Home
 </form>
 {{success}}
 
-<!--show track-->
+{% for artist, track in artist_track.items() %}
+{{ artist }} : {{ track }}
+{% endfor %}
 
 {% endblock %}

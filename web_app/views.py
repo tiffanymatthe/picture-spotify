@@ -8,7 +8,7 @@ import string
 import cv2
 import numpy as np
 from flask import (Flask, flash, make_response, redirect, render_template,
-                   request, url_for)
+                   request, url_for, session)
 from spotipy import oauth2
 from werkzeug.utils import secure_filename
 
@@ -24,6 +24,7 @@ app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    artist_track = {}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             # first go to authorization, which will redirect to playlist success message
@@ -49,8 +50,9 @@ def home():
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('uploaded_file',
             # filename=filename))
+            session['artist_track'] = artist_track
             return render_template("home.html", artist_track=artist_track)
-    return render_template("home.html")
+    return render_template("home.html", artist_track=artist_track)
 
 @app.route("/about/")
 def about():
@@ -92,11 +94,9 @@ def connect():
         print("ERROR")
     # https://stackoverflow.com/questions/53566536/python-get-url-fragment-identifier-with-flask
 
-    artist_track = {
-        'artist_name': 'artist_track'
-    }
+    artist_track = session['artist_track']
 
-    return render_template("home.html", success="success")
+    return render_template("add_playlist_result.html", artist_track=artist_track)
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

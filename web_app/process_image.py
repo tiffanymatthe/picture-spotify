@@ -34,15 +34,20 @@ def get_playlist(img: np.ndarray):
 
     Returns
     -------
-    unknown type! Need to find out. I think it is JSON. (so a string)
-        a playlist representing the color distribution.
+    dict [str, str]
+        a dictionary with keys as artists and values as their track
     """
     height = 10
     width = 4
     img = np.zeros((height,width,3), np.uint8) # white image
     colour_array = get_colour_array(img)
     playlist_size = 10
-    return colours_to_playlist(colour_array, playlist_size)
+    # return colours_to_playlist(colour_array, playlist_size)
+    return {
+        'Tove Lo': 'Habits (Stay High)',
+        'Julia Michaels': 'Issues',
+        'Astrid S': 'It\'s Ok If You Forget Me'
+    }
 
 def get_colour_array(img: np.ndarray):
     """Converts an image array with rgb values to a dictionary of discrete colors.
