@@ -12,10 +12,6 @@ https://github.com/spotify/web-api-auth-examples
 <div id="oauth">
 </div>
 
-{% for artist, track in artist_track.items() %}
-{{ artist }} : {{ track }}
-{% endfor %}
-
 {% raw %}
 <script id="user-profile-template" type="text/x-handlebars-template">
   <h2>Logged in as {{display_name}}</h2>
@@ -80,7 +76,10 @@ https://github.com/spotify/web-api-auth-examples
         var response = JSON.parse(this.responseText)
         console.log(response)
         userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-        addTrack("Justin", "Baby");
+        var dict = {{ artist_track|tojson }};
+        for (var artist in dict) {
+          console.log(artist, dict[artist]);
+        }
         //createPlaylist(response.id);
       }
     }
@@ -97,8 +96,13 @@ https://github.com/spotify/web-api-auth-examples
 
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        var response = JSON.parse(this.responseText)
-        console.log(response)
+        var response = JSON.parse(this.responseText);
+        console.log(response);
+        var dict = {{ artist_track|tojson }};
+        for (var artist in dict) {
+          console.log(artist, dict[artist]);
+        }
+        addTrack("Justin", "Baby");
       }
     }
 
@@ -108,7 +112,7 @@ https://github.com/spotify/web-api-auth-examples
     xhttp.open('POST', request_url, true);
     xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token);
     var params = {
-      "name":"New Playlist",
+      "name":"New Playlist1",
       "description":"uhhhh",
       "public":"false"
     };

@@ -1,14 +1,15 @@
+import json
 import os
 import secrets
+import string
 import sys
 from datetime import datetime
 from urllib.parse import urlencode
-import string
 
 import cv2
 import numpy as np
 from flask import (Flask, flash, make_response, redirect, render_template,
-                   request, url_for, session)
+                   request, session, url_for)
 from spotipy import oauth2
 from werkzeug.utils import secure_filename
 
@@ -27,11 +28,14 @@ def home():
     artist_track = {}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
-            # first go to authorization, which will redirect to playlist success message
-            return redirect(url_for('auth'))
+            if session.get('file_added') is None:
+                return render_template("home.html", success="No file added yet!", artist_track=artist_track)
+            else:
+                return redirect(url_for('auth'))
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
+            session['file_added'] = 'false'
             return redirect(request.url)
         file = request.files['file']
         filetype = type(file) # fileStorage type. Need to convert to color array
@@ -39,12 +43,14 @@ def home():
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
+            session.pop('file_added', None)
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filestr = file.read()
             npimg = np.fromstring(filestr, np.uint8)
             img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
             artist_track = primg.get_playlist(img)
+            session['file_added'] = 'true'
             # this need to change to sending file to python module and spitting out playlist
             # filename = secure_filename(file.filename)
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
