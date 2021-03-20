@@ -34,6 +34,10 @@ https://github.com/spotify/web-api-auth-examples
 </script>
 {% endraw %}
 
+{% for key, value in artist_track.items() %}
+{{ key }} : {{ value }}
+{% endfor %}
+
 {% raw %}
 <script id="oauth-template" type="text/x-handlebars-template">
   <h3>Token Information</h3>
@@ -70,13 +74,63 @@ https://github.com/spotify/web-api-auth-examples
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var response = JSON.parse(this.responseText)
+        console.log(response)
         userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+        addTrack("Justin", "Baby");
+        //createPlaylist(response.id);
       }
     }
 
     xhttp.open('GET', 'https://api.spotify.com/v1/me', true);
 
     xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token)
+    console.log(xhttp);
+    xhttp.send();
+  }
+
+  function createPlaylist(user_id) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = JSON.parse(this.responseText)
+        console.log(response)
+      }
+    }
+
+    var request_url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists';
+    console.log(request_url);
+
+    xhttp.open('POST', request_url, true);
+    xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    var params = {
+      "name":"New Playlist",
+      "description":"uhhhh",
+      "public":"false"
+    };
+    body = JSON.stringify(params);
+    console.log(xhttp);
+    xhttp.send(body);
+  }
+
+  function addTrack(artist, track) {
+    var type = "track";
+    var q = "?q=artist:queen%20track:bohemian%20rhapsody&type=track";
+    // var q = "?query=" + track + "%" + artist + "&type=" + type +"&limit=10";
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = JSON.parse(this.responseText)
+        console.log(response)
+      }
+    }
+    var request_url = 'https://api.spotify.com/v1/search' + q;
+    console.log(request_url);
+
+    xhttp.open('GET', request_url, true);
+    xhttp.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    console.log(xhttp);
     xhttp.send();
   }
 
