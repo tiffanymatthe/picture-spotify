@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import sys
 
 import spotipy
 import os
@@ -134,16 +135,64 @@ img = np.zeros((10,5,3), np.uint8)
 get_colour_array(img)
 print("Hello")
     """
+    # search for top 3 songs of each artist on spotify
+    # classify the tracks under their respective genres
+    # this gives me a database of some kind of songs
+    # then I assign each colour percentage to a proportion of songs
+    # randomly select songs from database based on percentages
+    # return a playlist song list
     return 0
 
-"""
-result = sp.search("Post Malone")
-track = result['tracks']['items'][0]
 
-artist = sp.artist(track["artists"][0]["external_urls"]["spotify"])
-print("artist genres:", artist["genres"])
+# shows artist info for a URN or URL
 
-album = sp.album(track["album"]["external_urls"]["spotify"])
-print("album genres:", album["genres"])
-print("album release-date:", album["release_date"])
+from spotipy.oauth2 import SpotifyClientCredentials
+import spotipy
+import sys
+import pprint
+
+search_str = 'post_malone'
+
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
 """
+result = sp.search(search_str)
+for i, t in enumerate(result['tracks']['items']):
+    print(' ', i, t['id'])
+
+for key, value in result['albums'].items():
+    print(key)
+   
+result = sp.new_releases()
+for i, t in enumerate(result['albums']['items']):
+    print(' ', i, t['id'])
+    tracks = sp.album_tracks(t['id'],limit=1)
+    print(tracks)
+"""
+def getAlbumsTracks(self, id=5dGWwsZ9iB2Xc3UKR0gif2):
+
+            tracks = self.__client.album_tracks(
+                album_id=id,
+                limit=50
+            )['items']
+
+            return [
+                {
+                    'trc_name':track['name'],
+                    'trc_uri':track['uri'],
+                    'trc_spotify':track['external_urls']['spotify'],
+                    'trc_id':track['id'],
+                    'trc_preview':track['preview_url'],
+                    'art_name':track['artists'][0]['name'],
+                    'art_uri':track['artists'][0]['uri'],
+                    'art_spotify':track['artists'][0]['external_urls']['spotify'],
+                    'art_id':track['artists'][0]['id']
+                }
+
+                for track in tracks 
+
+            ]
+
+result = sp.new_releases()
+for i, t in enumerate(result['albums']['items']):
+    print(' ', i, t['id'])
