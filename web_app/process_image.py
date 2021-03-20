@@ -10,12 +10,24 @@ from spotipy.oauth2 import SpotifyOAuth
 from PIL import Image
 
 import deezer
+client = deezer.Client()
 
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-img  = Image.open("yellow_1px.png").convert('RGB')
+
+img = Image.open('south_africa.png').convert('RGB')
 img.show()
+print(img.format)
+print(img.mode)
+print(img.size)
+print(img.palette)
+
+img.thumbnail((100,100))
+img.save('sout_africa_resized.png')
+
+print(img.size)
+
 npimage = np.asarray(img)
 
 """
@@ -150,8 +162,6 @@ def get_colour_array(img: np.ndarray):
         distance_from_orange = distance_3d(x, basic_colors["orange"])
         distance_from_brown = distance_3d(x, basic_colors["brown"])
         distance_from_purple = distance_3d(x, basic_colors["purple"])
-        print("distance_from_yellow:", distance_from_yellow)
-        print("distance_from_red:", distance_from_red)
 
         distance_dict = {
             "red": distance_from_red,
@@ -206,17 +216,15 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     unknown type! Need to find out.
         a playlist representing the colour distribution.
         
-
-img = np.zeros((10,5,3), np.uint8)
-get_colour_array(img)
-print("Hello")
     """
-    # search for top 3 songs of each artist on spotify
-    # classify the tracks under their respective genres
-    # this gives me a database of some kind of songs
-    # then I assign each colour percentage to a proportion of songs
-    # randomly select songs from database based on percentages
-    # return a playlist song list
+
+    genre = client.get_genre(113)
+
+    artists = genre.get_artists()
+
+    tracks = artists[1].get_top()
+
+    print(tracks)
     return 0
 
 get_colour_array(npimage)
