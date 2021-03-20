@@ -13,9 +13,9 @@ from PIL import Image
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-img  = Image.open("red.png").convert('RGB')
-img.show()
-npimage = np.asarray(img)
+# img  = Image.open("red.png").convert('RGB')
+# img.show()
+# npimage = np.asarray(img)
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -72,8 +72,8 @@ def get_playlist(img: np.ndarray):
     """
     height = 10
     width = 4
-    img = np.zeros((height,width,3), np.uint8) # white image
-    colour_array = get_colour_array(img)
+    #img = np.zeros((height,width,3), np.uint8) # white image
+    #colour_array = get_colour_array(img)
     playlist_size = 10
     # return colours_to_playlist(colour_array, playlist_size)
     return {
@@ -188,4 +188,4 @@ print("Hello")
     # return a playlist song list
     return 0
 
-get_colour_array(npimage)
+#get_colour_array(npimage)
