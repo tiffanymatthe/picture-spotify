@@ -72,7 +72,7 @@ def get_colour_array(img: np.ndarray):
     print(img)
 
     #HOW TO RESHAPE ANY IMAGE?
-    newimg = img.reshape(8,3)
+    newimg = img.reshape(height * width, 3)
 
     print(newimg)
 
@@ -154,45 +154,3 @@ import pprint
 search_str = 'post_malone'
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-
-"""
-result = sp.search(search_str)
-for i, t in enumerate(result['tracks']['items']):
-    print(' ', i, t['id'])
-
-for key, value in result['albums'].items():
-    print(key)
-   
-result = sp.new_releases()
-for i, t in enumerate(result['albums']['items']):
-    print(' ', i, t['id'])
-    tracks = sp.album_tracks(t['id'],limit=1)
-    print(tracks)
-"""
-def getAlbumsTracks(self, id=5dGWwsZ9iB2Xc3UKR0gif2):
-
-            tracks = self.__client.album_tracks(
-                album_id=id,
-                limit=50
-            )['items']
-
-            return [
-                {
-                    'trc_name':track['name'],
-                    'trc_uri':track['uri'],
-                    'trc_spotify':track['external_urls']['spotify'],
-                    'trc_id':track['id'],
-                    'trc_preview':track['preview_url'],
-                    'art_name':track['artists'][0]['name'],
-                    'art_uri':track['artists'][0]['uri'],
-                    'art_spotify':track['artists'][0]['external_urls']['spotify'],
-                    'art_id':track['artists'][0]['id']
-                }
-
-                for track in tracks 
-
-            ]
-
-result = sp.new_releases()
-for i, t in enumerate(result['albums']['items']):
-    print(' ', i, t['id'])
