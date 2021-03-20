@@ -7,7 +7,6 @@ import string
 
 import cv2
 import numpy as np
-import spotipy
 from flask import (Flask, flash, make_response, redirect, render_template,
                    request, url_for)
 from spotipy import oauth2
@@ -17,31 +16,18 @@ import web_app.process_image as primg
 
 from . import app
 
-"""
-# Client info
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-REDIRECT_URI = os.getenv('REDIRECT_URI')
-"""
-
-#SPOTIPY_CLIENT_ID = 'a2528115d9e9466394a6238c1feec07f'
-#SPOTIPY_CLIENT_SECRET = '798afc0399754a1fa8e49a8b2f38053f'
-#SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:5000/connect'
-SCOPE = 'playlist-modify-private'
-
-# Client info
 CLIENT_ID = "a2528115d9e9466394a6238c1feec07f"
 REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
-
-# Spotify API endpoints
 AUTH_URL = 'https://accounts.spotify.com/authorize'
-SEARCH_ENDPOINT = 'https://api.spotify.com/v1/search'
 
-access_token =""
+app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
+        if request.form.get('save_playlist'):
+            # first go to authorization, which will redirect to playlist success message
+            return redirect(url_for('auth'))
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -57,12 +43,13 @@ def home():
             filestr = file.read()
             npimg = np.fromstring(filestr, np.uint8)
             img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
-            primg.get_playlist(img)
+            artist_track = primg.get_playlist(img)
             # this need to change to sending file to python module and spitting out playlist
             # filename = secure_filename(file.filename)
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('uploaded_file',
             # filename=filename))
+            return render_template("home.html", artist_track=artist_track)
     return render_template("home.html")
 
 @app.route("/about/")
@@ -97,6 +84,7 @@ def auth():
 
 @app.route('/add_playlist_result')
 def connect():
+    # instead of this, redirect to home but check if no errors, then print success
     error = request.args.get('error')
     state = request.args.get('state')
 
@@ -108,7 +96,7 @@ def connect():
         'artist_name': 'artist_track'
     }
 
-    return render_template("add_playlist_result.html", artist_track=artist_track)
+    return render_template("home.html", success="success")
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
