@@ -16,12 +16,17 @@ import web_app.process_image as primg
 
 from . import app
 
+CLIENT_ID = "***REMOVED***"
+REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
+AUTH_URL = 'https://accounts.spotify.com/authorize'
+
 app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
         if request.form.get('save_playlist'):
+            # first go to authorization, which will redirect to playlist success message
             return render_template("home.html", success="success")
         # check if the post request has the file part
         if 'file' not in request.files:
