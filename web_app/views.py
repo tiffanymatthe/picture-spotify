@@ -16,10 +16,12 @@ import web_app.process_image as primg
 
 from . import app
 
+app.config.update(SECRET_KEY=os.urandom(24))
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        if request.args.get('save_playlist'):
+        if request.form.get('save_playlist'):
             return render_template("home.html", success="success")
         # check if the post request has the file part
         if 'file' not in request.files:
