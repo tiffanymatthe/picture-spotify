@@ -44,3 +44,8 @@ input.hidden {
     display: none;
     visibility: hidden;
 }
+
+#center-pic {
+  margin-left: auto;
+  margin-right: auto;
+}
