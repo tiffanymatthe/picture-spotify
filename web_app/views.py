@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 
 import web_app.process_image as primg
 
-from . import app
+from web_app import app
 
 CLIENT_ID = "***REMOVED***"
 REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
