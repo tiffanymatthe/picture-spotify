@@ -224,7 +224,7 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     print(tracks)
     return 0
 
-
+"""
 img = cv2.imread('red_1px.png')
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
@@ -243,3 +243,4 @@ else:
     npimage = img
 
 get_colour_array(npimage)
+"""
