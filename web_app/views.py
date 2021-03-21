@@ -25,6 +25,8 @@ app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.referrer is not None and "add_playlist_result" in request.referrer:
+        [session.pop(key) for key in list(session.keys())]
     artist_track = {"test": "hello", "fifk": "lhdskl jlskdjf sdfjs"}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
@@ -105,7 +107,6 @@ def connect():
 
     artist_track = session['artist_track']
     playlist_name = session['playlist_name']
-    session.clear()
     return render_template("add_playlist_result.html", artist_track=artist_track, playlist_name=playlist_name)
     #return redirect(url_for('home'))
 

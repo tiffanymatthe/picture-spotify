@@ -18,18 +18,15 @@ https://github.com/spotify/web-api-auth-examples
 </script>
 {% endraw %}
 
-<article class="message is-success success_statement">
-  <div class="message-body">
-    The playlist <i>{{playlist_name}}</i> was successfully created.
-  </div>
-</article>
 <article class="message is-danger fail_statement">
   <div class="message-body">
     The playlist <i>{{playlist_name}}</i> was not saved. Try again.
 </article>
+
 {% raw %}
-<script id="playlist-template" type="text/x-handlebars-template">
-  <div>Check out your playlist<a href={{external_urls.spotify}} target="_blank">here</a>.</div>
+<script id="playlist-template" type="text/x-handlebars-template" class="mb-3">
+  <div class="success_statement">The playlist <i>{{playlist_name}}</i> was successfully created.</div>
+  <div>Check out your playlist <a href={{external_urls.spotify}} target="_blank">here</a>.</div>
 </script>
 {% endraw %}
 
@@ -63,7 +60,7 @@ https://github.com/spotify/web-api-auth-examples
       if (this.readyState == 4 && this.status == 200) {
         var response = JSON.parse(this.responseText)
         userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-        //createPlaylist(response.id);
+        createPlaylist(response.id);
       }
     }
 
