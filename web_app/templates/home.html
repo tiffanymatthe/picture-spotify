@@ -7,12 +7,12 @@ Picture-Spotify Playlist Generator
 <title>Picture-Spotify Playlist Generator</title>
 <section class="section">
   <div class="container">
-    <h1 class="title">Upload A Picture</h1>
+    <h1 class="title">Picture-Spotify Playlist Generator</h1>
     <p class="subtitle">
-      Generate a Spotify playlist by uploading a picture!
+      Generate a Spotify playlist by uploading a picture.
     </p>
     <form method=post enctype=multipart/form-data>
-      <div id="upload-playlist-img" class="file is-info has-name">
+      <div id="upload-playlist-img" class="file is-info has-name mb-3">
         <label class="file-label">
           <input class="file-input" type="file" name="file" accept="image/*">
           <span class="file-cta">
@@ -27,35 +27,48 @@ Picture-Spotify Playlist Generator
             No file uploaded
           </span>
         </label>
-      </div>
-      <div class="control">
-        <input type=submit value="Create Playlist" class="button is-link is-light">
-      </div>
-      {% if fileAdded %}
-      <div id="submit_playlist">
-        <div class="field has-addons">
-          <div class="control">
-            <input name="playlist_name" type=text placeholder="Playlist Name" class="input">
-          </div>
-          <div class="control">
-            <input name="save_playlist" type=submit value="Add Playlist" class="button is-link">
-          </div>
+        <div class="control">
+          <input type=submit value="Create Playlist" class="button is-link is-light ml-3 mb-3">
         </div>
       </div>
-      {% endif %}
     </form>
   </div>
 
-  <div class="container">
+  {% if error %}
+  <article class="message is-danger mt-3">
+    <div class="message-body">
+      {{success}}
+    </div>
+  </article>
+  {% endif %}
+
+  {% if fileAdded %}
+  <div class="container mt-4 mb-4">
     <table class="table is-hoverable">
       {% for artist, track in artist_track.items() %}
         <tr>
+          <td><span class="has-text-weight-medium">{{ track }}</span></td>
           <td>{{ artist }}</td>
-          <td>{{ track }}</td>
         </tr>
       {% endfor %}
       </table>
   </div>
+  {% endif %}
+
+  {% if fileAdded %}
+  <form method=post enctype=multipart/form-data>
+    <div id="submit_playlist mb-3">
+      <div class="field has-addons">
+        <div class="control">
+          <input name="playlist_name" type=text placeholder="Playlist Name" class="input">
+        </div>
+        <div class="control">
+          <input name="save_playlist" type=submit value="Add Playlist" class="button is-link">
+        </div>
+      </div>
+    </div>
+  </form>
+  {% endif %}
 </section>
 
 <script>
