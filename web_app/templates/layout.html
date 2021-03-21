@@ -1,81 +1,96 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
-        <script src="https://kit.fontawesome.com/20f230f0a5.js" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='site.css')}}"
+    />
+    <script
+      src="https://kit.fontawesome.com/20f230f0a5.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-    </head>
+  <body>
+    <div class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('home') }}">
+          <img
+            src="https://bulma.io/images/bulma-logo.png"
+            width="112"
+            height="28"
+          />
+        </a>
 
-    <body>
-        <div class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="https://bulma.io">
-                  <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-                </a>
-            
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="navMenu" class="navbar-menu">
-                <div class="navbar-start">
-                    <a href="{{ url_for('home') }}" class="navbar-item">Home</a>
-                    <a href="{{ url_for('about') }}" class="navbar-item">About</a>
-                </div>
-                <div class="navbar-end">
-                    <a href="{{ url_for('contact') }}" class="navbar-item">Contact</a>
-                </div>
-            </div>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="{{ url_for('home') }}" class="navbar-item">Home</a>
         </div>
-
-        <div>
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    {% block content %}
-                    {% endblock %}
-                </div>
-            </div>
-            <hr/>
-            <footer class="footer">
-                <div class="content has-text-centered">
-                  <p>
-                    <strong>Picture Spotify</strong> by <a href="https://jaspermatthe.com">Jasper Matthé</a> and <a href="https://tiffanymatthe.com">Tiffany Matthé</a>. The source code can be found on
-                    <a href="https://github.com/tiffanymatthe/picture-spotify">Github</a>.
-                  </p>
-                </div>
-            </footer>
+        <div class="navbar-end">
+          <a href="{{ url_for('about') }}" class="navbar-item">About</a>
         </div>
-    </body>
+      </div>
+    </div>
+
+    <div>
+      <div class="columns is-centered">
+        <div class="column is-half">{% block content %} {% endblock %}</div>
+      </div>
+      <hr />
+      <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Picture Spotify</strong> by
+            <a href="https://jaspermatthe.com" target="_blank">Jasper Matthé</a> and
+            <a href="https://tiffanymatthe.com" target="_blank">Tiffany Matthé</a>. The source
+            code can be found on
+            <a href="https://github.com/tiffanymatthe/picture-spotify" target="_blank">Github</a
+            >.
+          </p>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-
+  document.addEventListener("DOMContentLoaded", () => {
     // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    const $navbarBurgers = Array.prototype.slice.call(
+      document.querySelectorAll(".navbar-burger"),
+      0
+    );
 
     // Check if there are any navbar burgers
     if ($navbarBurgers.length > 0) {
+      // Add a click event on each of them
+      $navbarBurgers.forEach((el) => {
+        el.addEventListener("click", () => {
+          // Get the target from the "data-target" attribute
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
 
-    // Add a click event on each of them
-    $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-
-        // Get the target from the "data-target" attribute
-        const target = el.dataset.target;
-        const $target = document.getElementById(target);
-
-        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          el.classList.toggle("is-active");
+          $target.classList.toggle("is-active");
         });
-    });
+      });
     }
-});
+  });
 </script>

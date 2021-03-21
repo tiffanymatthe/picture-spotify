@@ -12,6 +12,7 @@ Picture-Spotify Playlist Generator
   </p>
   <div class="container">
     <form method=post enctype=multipart/form-data>
+      <input name="save_playlist" type=submit value="Save Playlist" aria-hidden="true" tabindex="-1" role="none" class="hidden">
       <div id="upload-playlist-img" class="file is-info has-name mb-3">
         <label class="file-label">
           <input class="file-input" type="file" name="file" accept="image/*">
@@ -43,7 +44,7 @@ Picture-Spotify Playlist Generator
   {% endif %}
 
   {% if fileAdded %}
-  <div class="container mt-4 mb-4 column is-three-quarters box">
+  <div class="container mt-4 mb-4 box">
     <table class="table is-hoverable">
       <caption class="title is-4">Generated playlist</caption>
       <tr>
@@ -58,7 +59,7 @@ Picture-Spotify Playlist Generator
       {% endfor %}
       </table>
   </div>
-  <div class="container mt-4 mb-4 column is-three-quarters">
+  <div class="container mt-4 mb-4">
     <form method=post enctype=multipart/form-data>
       <div id="submit_playlist mb-3">
         <div class="field has-addons">
