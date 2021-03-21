@@ -31,7 +31,7 @@ def home():
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             if session.get('file_added') is None:
-                return render_template("home.html", success="No file added yet!", error=True, artist_track=artist_track)
+                return render_template("home.html", success="No file added yet!", error=True, fileAdded=False, artist_track=artist_track)
             elif request.form.get('playlist_name') is None or str.strip(request.form.get('playlist_name')) == "":
                 return render_template("home.html", success="Playlist name is empty.", artist_track=artist_track, error=True, fileAdded=True)
             else:
@@ -41,7 +41,7 @@ def home():
         if 'file' not in request.files:
             flash('No file part')
             session.pop('file_added', None)
-            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True)
+            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True, fileAdded=False)
         file = request.files['file']
         filetype = type(file) # fileStorage type. Need to convert to color array
         # if user does not select file, browser also
@@ -49,7 +49,7 @@ def home():
         if file.filename == '':
             flash('No selected file')
             session.pop('file_added', None)
-            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True)
+            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True, fileAdded=False)
         if file and allowed_file(file.filename):
             filestr = file.read()
             npimg = np.fromstring(filestr, np.uint8)
@@ -63,7 +63,7 @@ def home():
             # filename=filename))
             session['artist_track'] = artist_track
             return render_template("home.html", artist_track=artist_track, fileAdded=True)
-    return render_template("home.html", artist_track=artist_track, fileAdded=True)
+    return render_template("home.html", artist_track=artist_track, fileAdded=False)
 
 @app.route("/about/")
 def about():
