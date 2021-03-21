@@ -30,12 +30,15 @@ def home():
         if request.form.get('save_playlist'):
             if session.get('file_added') is None:
                 return render_template("home.html", success="No file added yet!", artist_track=artist_track)
+            elif request.form.get('playlist_name') is None or str.strip(request.form.get('playlist_name')) == "":
+                return render_template("home.html", success="Playlist name is empty.", artist_track=artist_track)
             else:
+                session['playlist_name'] = str.strip(request.form.get('playlist_name'))
                 return redirect(url_for('auth'))
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            session['file_added'] = 'false'
+            session.pop('file_added', None)
             return redirect(request.url)
         file = request.files['file']
         filetype = type(file) # fileStorage type. Need to convert to color array
@@ -101,8 +104,9 @@ def connect():
     # https://stackoverflow.com/questions/53566536/python-get-url-fragment-identifier-with-flask
 
     artist_track = session['artist_track']
+    playlist_name = session['playlist_name']
 
-    return render_template("add_playlist_result.html", artist_track=artist_track)
+    return render_template("add_playlist_result.html", artist_track=artist_track, playlist_name=playlist_name)
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

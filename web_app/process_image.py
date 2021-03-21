@@ -15,13 +15,14 @@ client = deezer.Client()
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-
+"""
 img = cv2.imread('iceland.jpg')
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
 npimage = np.asarray(resized_img)
 
 print(resized_img)
+"""
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -82,9 +83,9 @@ def get_playlist(img: np.ndarray):
     height = 10
     width = 4
     img = np.zeros((height,width,3), np.uint8)
-    colour_array = get_colour_array(img)
+    # colour_array = get_colour_array(img)
     playlist_size = 10
-    return colours_to_playlist(colour_array, playlist_size)
+    # return colours_to_playlist(colour_array, playlist_size)
     return {
         'Tove Lo': 'Habits (Stay High)',
         'Julia Michaels': 'Issues',
@@ -219,4 +220,4 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     print(tracks)
     return 0
 
-get_colour_array(npimage)
+# get_colour_array(npimage)
