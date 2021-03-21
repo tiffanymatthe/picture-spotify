@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import sys
 from math import sqrt, pow
+import sys, colorsys
 
 import spotipy
 import os
@@ -14,14 +15,6 @@ client = deezer.Client()
 
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
-
-
-img = cv2.imread('iceland.jpg')
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
-npimage = np.asarray(resized_img)
-
-print(resized_img)
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -128,7 +121,7 @@ def get_colour_array(img: np.ndarray):
     
 
     print("reshaped image:", newimg)
-
+    
     colour_count_dict = {
         "red": 0,
         "yellow": 0,
@@ -141,7 +134,7 @@ def get_colour_array(img: np.ndarray):
         "brown": 0,
         "purple": 0,
     }
-
+    """
     for x in newimg:
         distance_from_red = distance_3d(x, basic_colors["red"])
         distance_from_green = distance_3d(x, basic_colors["green"])
@@ -171,8 +164,20 @@ def get_colour_array(img: np.ndarray):
         min_colour_dist = min(distance_dict.values())
         min_colour_key_list = [key for key in distance_dict if distance_dict[key] == min_colour_dist]
         min_colour_key = min_colour_key_list[0]
+        
+    for x in newimg:
+        r = x[0]
+        g = x[1]
+        b = x[2]
+        match = "[{}, {}, {}]".format(int(r), int(g), int(b))
 
-        colour_count_dict[min_colour_key] += 1
+        for line in open("satfaces.txt"):
+            if line.startswith(match):
+                print("You were thinking of: " + line.split("] ")[1].strip())
+                break
+              
+        
+    colour_count_dict[min_colour_key] += 1
 
     total_colour = sum(colour_count_dict.values())
     perc_colour_dict = {
@@ -189,7 +194,7 @@ def get_colour_array(img: np.ndarray):
     }
     print("colour_count_dict: ", colour_count_dict)
     print("perc_colour_dict: ", perc_colour_dict)
-
+    """
     return 0
 
 
@@ -218,5 +223,23 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
 
     print(tracks)
     return 0
+
+
+img = cv2.imread('red_1px.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+print(type(img))
+print("test")
+print(img.shape)
+print(type(img.shape))
+
+height, width, _ = img.shape
+
+if ((width * height) > 1000):
+    resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+    npimage = np.asarray(resized_img)
+    print(resized_img)
+else:
+    npimage = img
 
 get_colour_array(npimage)
