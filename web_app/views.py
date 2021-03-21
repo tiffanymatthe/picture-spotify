@@ -60,8 +60,8 @@ def home():
             # return redirect(url_for('uploaded_file',
             # filename=filename))
             session['artist_track'] = artist_track
-            return render_template("home.html", artist_track=artist_track)
-    return render_template("home.html", artist_track=artist_track)
+            return render_template("home.html", artist_track=artist_track, fileAdded=True)
+    return render_template("home.html", artist_track=artist_track, fileAdded=False)
 
 @app.route("/about/")
 def about():
