@@ -18,7 +18,7 @@ https://github.com/spotify/web-api-auth-examples
 </script>
 {% endraw %}
 
-<article class="message is-danger fail_statement">
+<article class="message is-danger fail_statement" style="display:none">
   <div class="message-body">
     The playlist <i>{{playlist_name}}</i> was not saved. Try again.
 </article>
@@ -30,7 +30,9 @@ https://github.com/spotify/web-api-auth-examples
 </script>
 {% endraw %}
 
-<a href="{{ url_for('home') }}" class="button is-link">Create another playlist.</a>
+<div class='container column is-half'>
+  <a href="{{ url_for('home') }}" class="button is-link">Create another playlist.</a>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
 <script>
