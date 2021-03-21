@@ -9,9 +9,13 @@ Home
 <h1>Upload new File</h1>
 <form method=post enctype=multipart/form-data>
   <input type=file name=file accept="image/*">
-  <input type=submit value=Upload>
-  <input name="playlist_name" type=text value="Playlist Name">
-  <input name="save_playlist" type=submit value="Add Playlist">
+  <input type=submit value="Create Playlist">
+  {% if fileAdded %}
+  <div id="submit_playlist">
+    <input name="playlist_name" type=text placeholder="Playlist Name">
+    <input name="save_playlist" type=submit value="Add Playlist">
+  </div>
+  {% endif %}
 </form>
 {{success}}
 
