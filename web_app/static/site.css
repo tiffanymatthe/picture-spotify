@@ -1,29 +1,46 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css";
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
 
 .title {
-    font-family: 'DM Serif Display', serif;
+  font-family: "DM Serif Display", serif;
 }
 
 .button.is-link {
-    background-color: #8C6C8C !important;
-    color: white !important;
+  background-color: #8c6c8c !important;
+  color: white !important;
 }
 
 .button.is-light {
-    color: #534053 !important;
-    background-color: #BEBEBE !important;
+  color: #534053 !important;
+  background-color: #bebebe !important;
 }
 
 span.file-cta {
-    background-color: black !important;
+  background-color: black !important;
 }
 
 a {
-    color: #E59082 !important;
+  color: #e59082 !important;
 }
 
-.table, .center-form {
-    margin-left: auto;
-    margin-right: auto;
-  }
+.table,
+.center-form {
+  margin-left: auto;
+  width: 80%;
+  margin-right: auto;
+}
+
+a.navbar-item {
+    color: black !important;
+}
+
+input.hidden {
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    outline: none;
+    border: 0px;
+    display: none;
+    visibility: hidden;
+}

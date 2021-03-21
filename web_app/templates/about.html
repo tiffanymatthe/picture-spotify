@@ -1,7 +1,33 @@
-{% extends "layout.html" %}
-{% block title %}
-About
-{% endblock %}
-{% block content %}
-<p>About page for the Visual Studio Code Flask tutorial.</p>
+{% extends "layout.html" %} {% block title %} About {% endblock %} {% block
+content %}
+<section>
+  <h1 class="title">About</h1>
+  <p class="subtitle">A bit about the app creation.</p>
+  <div class="container">
+    <div>
+      This web app was created using Flask, Python, and the Bulma CSS framework. The full source code can be found on <a href="https://github.com/tiffanymatthe/picture-spotify" target="_blank">Github</a>.
+    </div>
+    <br />
+    <div class="has-text-weight-medium">Some tremendously helpful sources:</div>
+    <div>
+      <ol>
+        <li>
+          Spotify Web API Authentication Examples.
+          <a
+            href="https://github.com/spotify/web-api-auth-examples"
+            target="_blank"
+            >(Github Repository)</a
+          >
+        </li>
+        <li>
+          What Colour Is This?
+          <a href="https://codegolf.stackexchange.com/a/32412" target="_blank"
+            >(Stack Exchange)</a
+          >
+        </li>
+        <li>Jukka Holm , Antti Aaltonen & Harri Siirtola (2009) Associating Colours with Musical Genres, <i>Journal of New Music Research</i>, 38:1, 87-100, DOI: <a href="https://doi.org/10.1080/09298210902940094" target="_blank">10.1080/09298210902940094</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
 {% endblock %}
