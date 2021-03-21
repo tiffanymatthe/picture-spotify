@@ -9,53 +9,62 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 from PIL import Image
 
+import deezer
+client = deezer.Client()
 
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-# img  = Image.open("red.png").convert('RGB')
-# img.show()
-# npimage = np.asarray(img)
+
+img = cv2.imread('iceland.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+npimage = np.asarray(resized_img)
+
+print(resized_img)
 
 """
 npimg = np.fromstring(filestr, np.uint8)
 img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
 """
 
-# add color-genre dictionary as a constant here
+# add colour-genre dictionary as a constant here
 COLOUR_GENRE = {
-    "black": "Metal",
-    "blue": "Blues",
-    "brown": "Country",
-    "cyan": "Electronica and Dance",
-    "orange": "Reggae",
+    "red" : "Rock",
+    "green" : ["Country", "Folk"],
+    "yellow" : ["Reggae", "Latin"],
+    "blue" : ["Blues", "Jazz"],
+    "black" : "Metal",
+    "white" : ["Gospel", "Classical"],
     "pink": "Pop",
-    "purple": "Gospel",
-    "red": "Rock",
-    "white": "Gospel",
-    "yellow": "Latin",
+    "cyan" : ["Electronic", "Dance"],
+    #"grey" : "Other",
+    "orange" : ["Soul", "r-n-b", "funk", "Hip-Hop"],
+    "brown" : "World Music",
+    "purple" : "New Age",
 }
 
 #basic colour dictionary
 basic_colors = {
+    "red" : [255, 0, 0],
+    "green" : [0, 255, 0],
+    "yellow" : [255, 255, 0],
+    "blue" : [0, 0, 255],
     "black" : [0, 0, 0],
     "white" : [255, 255, 255],
-    "red" : [255, 0, 0],
-    "orange" : [255, 128, 0],
-    "yellow" : [255, 255, 0],
-    "chartreuse" : [128, 255, 0],
-    "green" : [0, 255, 0],
-    "spring green" : [0, 255, 128],
+    "pink": [255, 182, 193],
     "cyan" : [0, 255, 255],
-    "azure" : [0, 128, 255],
-    "blue" : [0, 0, 255],
+    #"grey" : [128,128,128],
+    "orange" : [255, 128, 0],
+    "brown" : [165 ,42, 42],
+    "purple" : [128, 0, 128],   
 }
 
+# finding distance between any x and dictionary of colours
 def distance_3d(rgb_1, rgb_2):
     return sqrt(pow(rgb_1[0] - rgb_2[0], 2)+
                 pow(rgb_1[1] - rgb_2[1], 2)+
                 pow(rgb_1[2] - rgb_2[2], 2))
-
 
 def get_playlist(img: np.ndarray):
     """Converts an image array with rgb values to a playlist
@@ -72,10 +81,10 @@ def get_playlist(img: np.ndarray):
     """
     height = 10
     width = 4
-    #img = np.zeros((height,width,3), np.uint8) # white image
-    #colour_array = get_colour_array(img)
+    img = np.zeros((height,width,3), np.uint8)
+    colour_array = get_colour_array(img)
     playlist_size = 10
-    # return colours_to_playlist(colour_array, playlist_size)
+    return colours_to_playlist(colour_array, playlist_size)
     return {
         'Tove Lo': 'Habits (Stay High)',
         'Julia Michaels': 'Issues',
@@ -110,55 +119,79 @@ def get_colour_array(img: np.ndarray):
     print(img)
 
     """
-    print(img.ndim)
+    print("Number of dimensions of image: ", img.ndim)
     height, width, dx = img.shape
-    print(height)
-    print(dx)
+    print("height: ", height)
+    print("value of third dimension: ", dx)
     #HOW TO RESHAPE ANY IMAGE?
     newimg = img.reshape(height * width, 3)
     
 
-    print(newimg)
+    print("reshaped image:", newimg)
 
-    red_count = 0
-    green_count = 0
-    blue_count = 0
-    other = 0
-
-    for x in newimg:
-        print("color_name: " + str(distance_3d(x, basic_colors["yellow"])))
-    """
-    for x in newimg:
-        red_colour = x[0]
-        green_colour = x[1]
-        blue_colour = x[2]
-
-        if (red_colour > green_colour and red_colour > blue_colour):
-            red_count += 1        
-        elif (green_colour > red_colour and green_colour > blue_colour):
-            green_count += 1
-        elif (blue_colour > red_colour and blue_colour > green_colour):
-            blue_count += 1
-        else:
-            other += 1
-
-    total_colour = red_count + green_count + blue_count + other
-
-    red_perc = red_count/total_colour
-    green_perc = green_count/total_colour
-    blue_perc = blue_count/total_colour
-    other_perc = other/total_colour
-
-    colour_dict = {
-        "red_compo": red_perc,
-        "green_compo": green_perc,
-        "blue_compo": blue_perc,
-        "other_compo": other_perc,
+    colour_count_dict = {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0,
+        "black": 0,
+        "white": 0,
+        "pink": 0,
+        "cyan": 0,
+        "orange": 0,
+        "brown": 0,
+        "purple": 0,
     }
 
-    print(colour_dict)
-    return colour_dict
-    """
+    for x in newimg:
+        distance_from_red = distance_3d(x, basic_colors["red"])
+        distance_from_green = distance_3d(x, basic_colors["green"])
+        distance_from_yellow = distance_3d(x, basic_colors["yellow"])
+        distance_from_blue = distance_3d(x, basic_colors["blue"])
+        distance_from_black = distance_3d(x, basic_colors["black"])
+        distance_from_white = distance_3d(x, basic_colors["white"])
+        distance_from_pink = distance_3d(x, basic_colors["pink"])
+        distance_from_cyan = distance_3d(x, basic_colors["cyan"])
+        distance_from_orange = distance_3d(x, basic_colors["orange"])
+        distance_from_brown = distance_3d(x, basic_colors["brown"])
+        distance_from_purple = distance_3d(x, basic_colors["purple"])
+
+        distance_dict = {
+            "red": distance_from_red,
+            "yellow": distance_from_yellow,
+            "blue": distance_from_blue,
+            "black": distance_from_black,
+            "white": distance_from_white,
+            "pink": distance_from_pink,
+            "cyan": distance_from_cyan,
+            "orange": distance_from_orange,
+            "brown": distance_from_brown,
+            "purple": distance_from_purple,
+        }
+
+        min_colour_dist = min(distance_dict.values())
+        min_colour_key_list = [key for key in distance_dict if distance_dict[key] == min_colour_dist]
+        min_colour_key = min_colour_key_list[0]
+
+        colour_count_dict[min_colour_key] += 1
+
+    total_colour = sum(colour_count_dict.values())
+    perc_colour_dict = {
+        "red": colour_count_dict["red"]/total_colour,
+        "yellow": colour_count_dict["yellow"]/total_colour,
+        "blue": colour_count_dict["blue"]/total_colour,
+        "black": colour_count_dict["black"]/total_colour,
+        "white": colour_count_dict["white"]/total_colour,
+        "pink": colour_count_dict["pink"]/total_colour,
+        "cyan": colour_count_dict["cyan"]/total_colour,
+        "orange": colour_count_dict["orange"]/total_colour,
+        "brown": colour_count_dict["brown"]/total_colour,
+        "purple": colour_count_dict["purple"]/total_colour,
+    }
+    print("colour_count_dict: ", colour_count_dict)
+    print("perc_colour_dict: ", perc_colour_dict)
+
+    return 0
+
 
 def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     """Converts a dictionary of weighted colours to a spotify playlist.
@@ -173,19 +206,17 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     Returns
     -------
     unknown type! Need to find out.
-        a playlist representing the color distribution.
+        a playlist representing the colour distribution.
         
-
-img = np.zeros((10,5,3), np.uint8)
-get_colour_array(img)
-print("Hello")
     """
-    # search for top 3 songs of each artist on spotify
-    # classify the tracks under their respective genres
-    # this gives me a database of some kind of songs
-    # then I assign each colour percentage to a proportion of songs
-    # randomly select songs from database based on percentages
-    # return a playlist song list
+
+    genre = client.get_genre(113)
+
+    artists = genre.get_artists()
+
+    tracks = artists[1].get_top()
+
+    print(tracks)
     return 0
 
-#get_colour_array(npimage)
+get_colour_array(npimage)
