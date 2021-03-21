@@ -17,11 +17,10 @@ import web_app.process_image as primg
 
 from web_app import app
 
-CLIENT_ID = "***REMOVED***"
 REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 
-app.config.update(SECRET_KEY=os.urandom(24))
+app.config.update(os.environ['SECRET_KEY'])
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -84,7 +83,7 @@ def auth():
     # Request authorization from user
     # Only including `state` here for error logging purposes.
     payload = {
-        'client_id': CLIENT_ID,
+        'client_id': os.environ['SPOTIPY_CLIENT_ID'],
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
         'scope': 'user-read-private user-read-email',
