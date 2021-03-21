@@ -15,7 +15,7 @@ img.save('sout_africa_resized.png')
 print(img.size)
 
 
-"""
+
 
 import cv2
 import numpy as np
@@ -25,3 +25,4 @@ resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
 npimage = np.asarray(resized_img)
 
 print(resized_img)
+"""

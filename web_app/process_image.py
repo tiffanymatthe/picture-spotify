@@ -16,19 +16,12 @@ auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
-img = Image.open('south_africa.png').convert('RGB')
-img.show()
-print(img.format)
-print(img.mode)
-print(img.size)
-print(img.palette)
+img = cv2.imread('iceland.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+resized_img = cv2.resize(img, dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+npimage = np.asarray(resized_img)
 
-img.thumbnail((100,100))
-img.save('sout_africa_resized.png')
-
-print(img.size)
-
-npimage = np.asarray(img)
+print(resized_img)
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -59,12 +52,12 @@ basic_colors = {
     "blue" : [0, 0, 255],
     "black" : [0, 0, 0],
     "white" : [255, 255, 255],
-    "pink": [255,182,193],
+    "pink": [255, 182, 193],
     "cyan" : [0, 255, 255],
     #"grey" : [128,128,128],
     "orange" : [255, 128, 0],
     "brown" : [165 ,42, 42],
-    "purple" : [128,0,128],   
+    "purple" : [128, 0, 128],   
 }
 
 # finding distance between any x and dictionary of colours
@@ -72,7 +65,6 @@ def distance_3d(rgb_1, rgb_2):
     return sqrt(pow(rgb_1[0] - rgb_2[0], 2)+
                 pow(rgb_1[1] - rgb_2[1], 2)+
                 pow(rgb_1[2] - rgb_2[2], 2))
-
 
 def get_playlist(img: np.ndarray):
     """Converts an image array with rgb values to a playlist
