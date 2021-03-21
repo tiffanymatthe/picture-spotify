@@ -25,7 +25,7 @@ app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    artist_track = {}
+    artist_track = {"test": "hello", "fifk": "lhdskl jlskdjf sdfjs"}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             if session.get('file_added') is None:
@@ -61,7 +61,7 @@ def home():
             # filename=filename))
             session['artist_track'] = artist_track
             return render_template("home.html", artist_track=artist_track, fileAdded=True)
-    return render_template("home.html", artist_track=artist_track, fileAdded=False)
+    return render_template("home.html", artist_track=artist_track, fileAdded=True)
 
 @app.route("/about/")
 def about():
