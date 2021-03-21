@@ -20,7 +20,7 @@ from web_app import app
 REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 
-app.config.update(SECRET_KEY=environ['SECRET_KEY'])
+app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
