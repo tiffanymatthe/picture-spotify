@@ -6,11 +6,11 @@ Picture-Spotify Playlist Generator
 <!doctype html>
 <title>Picture-Spotify Playlist Generator</title>
 <section class="section">
+  <h1 class="title">Picture-Spotify Playlist Generator</h1>
+  <p class="subtitle">
+    Generate a Spotify playlist by uploading a picture.
+  </p>
   <div class="container">
-    <h1 class="title">Picture-Spotify Playlist Generator</h1>
-    <p class="subtitle">
-      Generate a Spotify playlist by uploading a picture.
-    </p>
     <form method=post enctype=multipart/form-data>
       <div id="upload-playlist-img" class="file is-info has-name mb-3">
         <label class="file-label">
@@ -43,8 +43,13 @@ Picture-Spotify Playlist Generator
   {% endif %}
 
   {% if fileAdded %}
-  <div class="container mt-4 mb-4">
+  <div class="container mt-4 mb-4 column is-half box">
     <table class="table is-hoverable">
+      <caption class="title is-4">Generated playlist</caption>
+      <tr>
+        <th>Track</th>
+        <th>Artist</th>
+      </tr>
       {% for artist, track in artist_track.items() %}
         <tr>
           <td><span class="has-text-weight-medium">{{ track }}</span></td>
@@ -53,21 +58,20 @@ Picture-Spotify Playlist Generator
       {% endfor %}
       </table>
   </div>
-  {% endif %}
-
-  {% if fileAdded %}
-  <form method=post enctype=multipart/form-data>
-    <div id="submit_playlist mb-3">
-      <div class="field has-addons">
-        <div class="control">
-          <input name="playlist_name" type=text placeholder="Playlist Name" class="input">
-        </div>
-        <div class="control">
-          <input name="save_playlist" type=submit value="Add Playlist" class="button is-link">
+  <div class="container mt-4 mb-4 column is-half">
+    <form method=post enctype=multipart/form-data>
+      <div id="submit_playlist mb-3">
+        <div class="field has-addons">
+          <div class="control">
+            <input name="playlist_name" type=text placeholder="Playlist Name" class="input">
+          </div>
+          <div class="control">
+            <input name="save_playlist" type=submit value="Save Playlist" class="button is-link">
+          </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
   {% endif %}
 </section>
 
