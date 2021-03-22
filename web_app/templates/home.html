@@ -1,21 +1,91 @@
 {% extends "layout.html" %}
 {% block title %}
-Home
+Picture-Spotify Playlist Generator
 {% endblock %}
 {% block content %}
-<p>Home page for the Visual Studio Code Flask tutorial.</p>
 <!doctype html>
-<title>Upload new File</title>
-<h1>Upload new File</h1>
-<form method=post enctype=multipart/form-data>
-  <input type=file name=file accept="image/*">
-  <input type=submit value=Upload>
-  <input name="save_playlist" type=submit value="Add Playlist">
-</form>
-{{success}}
+<title>Picture-Spotify Playlist Generator</title>
+<section class="section">
+  <h1 class="title">Picture-Spotify Playlist Generator</h1>
+  <p class="subtitle">
+    Generate a Spotify playlist by uploading a picture.
+  </p>
+  <div class="container">
+    <form method=post enctype=multipart/form-data>
+      <input name="save_playlist" type=submit value="Save Playlist" aria-hidden="true" tabindex="-1" role="none" class="hidden">
+      <div id="upload-playlist-img" class="file is-info has-name mb-3 is-flex is-flex-wrap-wrap">
+        <div class="control mb-3">
+          <label class="file-label">
+            <input class="file-input" type="file" name="file" accept="image/*">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Upload image
+              </span>
+            </span>
+            <span class="file-name">
+              No file uploaded
+            </span>
+          </label>
+        </div>
+        <div class="control">
+          <input type=submit value="Create Playlist" class="button is-link is-light ml-3 mb-3">
+        </div>
+      </div>
+    </form>
+  </div>
 
-{% for artist, track in artist_track.items() %}
-{{ artist }} : {{ track }}
-{% endfor %}
+  {% if error %}
+  <article class="message is-danger mt-3">
+    <div class="message-body">
+      {{success}}
+    </div>
+  </article>
+  {% endif %}
+
+  {% if fileAdded %}
+  <div class="container mt-4 mb-4 box">
+    <table class="table is-hoverable">
+      <caption class="title is-4">Generated playlist</caption>
+      <tr>
+        <th>Track</th>
+        <th>Artist</th>
+      </tr>
+      {% for artist, track in artist_track.items() %}
+        <tr>
+          <td><span class="has-text-weight-medium">{{ track }}</span></td>
+          <td>{{ artist }}</td>
+        </tr>
+      {% endfor %}
+      </table>
+  </div>
+  <div class="container mt-4 mb-4">
+    <form method=post enctype=multipart/form-data>
+      <div id="submit_playlist mb-3">
+        <div class="field has-addons">
+          <div class="control">
+            <input name="playlist_name" type=text placeholder="Playlist Name" class="input">
+          </div>
+          <div class="control">
+            <input name="save_playlist" type=submit value="Save Playlist" class="button is-link">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+</section>
+
+<script>
+  const fileInput = document.querySelector('#upload-playlist-img input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#upload-playlist-img .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+  }
+</script>
 
 {% endblock %}

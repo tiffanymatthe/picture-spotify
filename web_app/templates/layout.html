@@ -1,26 +1,101 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='site.css')}}"
+    />
+    <script
+      src="https://kit.fontawesome.com/20f230f0a5.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-    <body>
-        <div class="navbar">
-            <a href="{{ url_for('home') }}" class="navbar-brand">Home</a>
-            <a href="{{ url_for('about') }}" class="navbar-item">About</a>
-            <a href="{{ url_for('contact') }}" class="navbar-item">Contact</a>
-        </div>
+  <body>
+    <div class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('home') }}">
+          <img
+            src="/static/images/logo_picspot.png"
+            width="109"
+            height="60"
+          />
+        </a>
 
-        <div class="body-content">
-            {% block content %}
-            {% endblock %}
-            <hr/>
-            <footer>
-                <p>© 2018</p>
-            </footer>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="{{ url_for('home') }}" class="navbar-item">Home</a>
         </div>
-    </body>
+        <div class="navbar-end">
+          <a href="{{ url_for('about') }}" class="navbar-item">About</a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="columns is-centered">
+        <div class="column is-half">{% block content %} {% endblock %}</div>
+      </div>
+      <hr />
+      <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Picture Spotify</strong> by
+            <a href="https://jaspermatthe.com" target="_blank">Jasper Matthé</a> and
+            <a href="https://tiffanymatthe.com" target="_blank">Tiffany Matthé</a>. The source
+            code can be found on
+            <a href="https://github.com/tiffanymatthe/picture-spotify" target="_blank">Github</a
+            >.
+          </p>
+          <p>Created for Spotify.</p>
+          <figure class="image is-32x32 mt-3 center-form" id="center-pic">
+            <img src="/static/images/Spotify_Icon_RGB_Green.png">
+          </figure>
+          
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Get all "navbar-burger" elements
+    const $navbarBurgers = Array.prototype.slice.call(
+      document.querySelectorAll(".navbar-burger"),
+      0
+    );
+
+    // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+      // Add a click event on each of them
+      $navbarBurgers.forEach((el) => {
+        el.addEventListener("click", () => {
+          // Get the target from the "data-target" attribute
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          el.classList.toggle("is-active");
+          $target.classList.toggle("is-active");
+        });
+      });
+    }
+  });
+</script>
