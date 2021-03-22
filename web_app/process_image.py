@@ -28,34 +28,10 @@ COLOUR_GENRE = {
     "white" : ["Gospel", "Classical"],
     "pink": "Pop",
     "cyan" : ["Electronic", "Dance"],
-    #"grey" : "Other",
     "orange" : ["Soul", "r-n-b", "funk", "Hip-Hop"],
     "brown" : "World Music",
     "purple" : "New Age",
 }
-
-"""
-#basic colour dictionary
-basic_colors = {
-    "red" : [255, 0, 0],
-    "green" : [0, 255, 0],
-    "yellow" : [255, 255, 0],
-    "blue" : [0, 0, 255],
-    "black" : [0, 0, 0],
-    "white" : [255, 255, 255],
-    "pink": [255, 182, 193],
-    "cyan" : [0, 255, 255],
-    #"grey" : [128,128,128],
-    "orange" : [255, 128, 0],
-    "brown" : [165 ,42, 42],
-    "purple" : [128, 0, 128],   
-}
-# finding distance between any x and dictionary of colours
-def distance_3d(rgb_1, rgb_2):
-    return sqrt(pow(rgb_1[0] - rgb_2[0], 2)+
-                pow(rgb_1[1] - rgb_2[1], 2)+
-                pow(rgb_1[2] - rgb_2[2], 2))
-"""
 
 def get_playlist(img: np.ndarray):
     """Converts an image array with rgb values to a playlist
@@ -70,9 +46,6 @@ def get_playlist(img: np.ndarray):
     dict [str, str]
         a dictionary with keys as artists and values as their track
     """
-    height = 10
-    width = 4
-    img = np.zeros((height,width,3), np.uint8)
     # colour_array = get_colour_array(img)
     playlist_size = 10
     # return colours_to_playlist(colour_array, playlist_size)
@@ -162,38 +135,6 @@ def get_colour_array(img: np.ndarray):
         'lime green': 'green',
     }
 
-    """
-    for x in newimg:
-        distance_from_red = distance_3d(x, basic_colors["red"])
-        distance_from_green = distance_3d(x, basic_colors["green"])
-        distance_from_yellow = distance_3d(x, basic_colors["yellow"])
-        distance_from_blue = distance_3d(x, basic_colors["blue"])
-        distance_from_black = distance_3d(x, basic_colors["black"])
-        distance_from_white = distance_3d(x, basic_colors["white"])
-        distance_from_pink = distance_3d(x, basic_colors["pink"])
-        distance_from_cyan = distance_3d(x, basic_colors["cyan"])
-        distance_from_orange = distance_3d(x, basic_colors["orange"])
-        distance_from_brown = distance_3d(x, basic_colors["brown"])
-        distance_from_purple = distance_3d(x, basic_colors["purple"])
-
-        distance_dict = {
-            "red": distance_from_red,
-            "yellow": distance_from_yellow,
-            "blue": distance_from_blue,
-            "black": distance_from_black,
-            "white": distance_from_white,
-            "pink": distance_from_pink,
-            "cyan": distance_from_cyan,
-            "orange": distance_from_orange,
-            "brown": distance_from_brown,
-            "purple": distance_from_purple,
-        }
-    
-        min_colour_dist = min(distance_dict.values())
-        min_colour_key_list = [key for key in distance_dict if distance_dict[key] == min_colour_dist]
-        min_colour_key = min_colour_key_list[0]
-        colour_count_dict[min_colour_key] += 1
-    """
     for x in newimg:
         r = x[0]
         g = x[1]
@@ -254,14 +195,35 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
         a playlist representing the colour distribution.
         
     """
+    genre_id_dict = {
+    "rock": 152,
+    "country": 84,
+    "folk": 466,
+    "reggae": 122,
+    "latin": 197,
+    "blues": 153,
+    "jazz": 129,
+    "metal": 464,
+    "gospel": 187,
+    "classical": 98,
+    "pop": 132,
+    "electronic": 110,
+    "dance": 113,
+    "soul": 169,
+    "r-n-b": 165,
+    "hip-hop": 116,
+    "world music": 484,
+    "new age": 474,
+    }
 
-    genre = client.get_genre(113)
+    for x in perc_colour_dict:
+        genre = COLOUR_GENRE[x]
+        genre_id = genre_id_dict[genre]
+        artists = genre.get_artists()
+        print(artists)
+        
 
-    artists = genre.get_artists()
 
-    tracks = artists[1].get_top()
-
-    print(tracks)
     return 0
 
 
@@ -295,14 +257,4 @@ get_colour_array(npimage)
 """
 npimg = np.fromstring(filestr, np.uint8)
 img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
-"""
-
-"""
-colour_count_dict = {}
-
-for line in open("satfaces.txt"):
-    colour = line.split("] ")[1].strip()
-    colour_count_dict[colour] = colour
-
-print(colour_count_dict)
 """
