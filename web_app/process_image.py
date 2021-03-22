@@ -73,9 +73,9 @@ def get_playlist(img: np.ndarray):
     height = 10
     width = 4
     img = np.zeros((height,width,3), np.uint8)
-    colour_array = get_colour_array(img)
+    # colour_array = get_colour_array(img)
     playlist_size = 10
-    return colours_to_playlist(colour_array, playlist_size)
+    # return colours_to_playlist(colour_array, playlist_size)
     return {
         'Tove Lo': 'Habits (Stay High)',
         'Julia Michaels': 'Issues',
@@ -264,8 +264,13 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     print(tracks)
     return 0
 
+<<<<<<< HEAD
 
 img = cv2.imread('south_africa.png')
+=======
+"""
+img = cv2.imread('red_1px.png')
+>>>>>>> fe036fe7cf61ccbdbfcf2113af35640c59508f47
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 print(type(img))
@@ -291,6 +296,7 @@ else:
     npimage = img
 
 get_colour_array(npimage)
+<<<<<<< HEAD
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -305,4 +311,6 @@ for line in open("satfaces.txt"):
     colour_count_dict[colour] = colour
 
 print(colour_count_dict)
+=======
+>>>>>>> fe036fe7cf61ccbdbfcf2113af35640c59508f47
 """

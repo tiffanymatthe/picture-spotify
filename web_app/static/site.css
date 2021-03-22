@@ -1,34 +1,51 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css";
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
 
-.message {
-    font-weight: 600;
-    color: blue;
+.title {
+  font-family: "DM Serif Display", serif;
 }
 
-.navbar {
-    background-color: lightslategray;
-    font-size: 1em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: white;
-    padding: 8px 5px 8px 5px;
+.button.is-link {
+  background-color: #8c6c8c !important;
+  color: white !important;
 }
 
-.navbar a {
-    text-decoration: none;
-    color: inherit;
+.button.is-light {
+  color: #534053 !important;
+  background-color: #bebebe !important;
 }
 
-.navbar-brand {
-    font-size: 1.2em;
-    font-weight: 600;
+span.file-cta {
+  background-color: black !important;
 }
 
-.navbar-item {
-    font-variant: small-caps;
-    margin-left: 30px;
+a {
+  color: #e59082 !important;
 }
 
-.body-content {
-    padding: 5px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.table,
+.center-form {
+  margin-left: auto;
+  width: 80%;
+  margin-right: auto;
+}
+
+a.navbar-item {
+    color: black !important;
+}
+
+input.hidden {
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    outline: none;
+    border: 0px;
+    display: none;
+    visibility: hidden;
+}
+
+#center-pic {
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -15,28 +15,32 @@ from werkzeug.utils import secure_filename
 
 import web_app.process_image as primg
 
-from . import app
+from web_app import app
 
-CLIENT_ID = "***REMOVED***"
-REDIRECT_URI = 'http://127.0.0.1:5000/add_playlist_result'
+REDIRECT_URI = 'https://picture-spotify-app.herokuapp.com/add_playlist_result'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 
-app.config.update(SECRET_KEY=os.urandom(24))
+app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    artist_track = {}
+    if request.referrer is not None and "add_playlist_result" in request.referrer:
+        [session.pop(key) for key in list(session.keys())]
+    artist_track = {"test": "hello", "fifk": "lhdskl jlskdjf sdfjs"}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             if session.get('file_added') is None:
-                return render_template("home.html", success="No file added yet!", artist_track=artist_track)
+                return render_template("home.html", success="No file added yet!", error=True, fileAdded=False, artist_track=artist_track)
+            elif request.form.get('playlist_name') is None or str.strip(request.form.get('playlist_name')) == "":
+                return render_template("home.html", success="Playlist name is empty.", artist_track=artist_track, error=True, fileAdded=True)
             else:
+                session['playlist_name'] = str.strip(request.form.get('playlist_name'))
                 return redirect(url_for('auth'))
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            session['file_added'] = 'false'
-            return redirect(request.url)
+            session.pop('file_added', None)
+            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True, fileAdded=False)
         file = request.files['file']
         filetype = type(file) # fileStorage type. Need to convert to color array
         # if user does not select file, browser also
@@ -44,7 +48,7 @@ def home():
         if file.filename == '':
             flash('No selected file')
             session.pop('file_added', None)
-            return redirect(request.url)
+            return render_template("home.html", success="File not added.", artist_track=artist_track, error=True, fileAdded=False)
         if file and allowed_file(file.filename):
             filestr = file.read()
             npimg = np.fromstring(filestr, np.uint8)
@@ -57,8 +61,8 @@ def home():
             # return redirect(url_for('uploaded_file',
             # filename=filename))
             session['artist_track'] = artist_track
-            return render_template("home.html", artist_track=artist_track)
-    return render_template("home.html", artist_track=artist_track)
+            return render_template("home.html", artist_track=artist_track, fileAdded=True)
+    return render_template("home.html", artist_track=artist_track, fileAdded=False)
 
 @app.route("/about/")
 def about():
@@ -79,7 +83,7 @@ def auth():
     # Request authorization from user
     # Only including `state` here for error logging purposes.
     payload = {
-        'client_id': CLIENT_ID,
+        'client_id': os.environ['SPOTIPY_CLIENT_ID'],
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
         'scope': 'user-read-private user-read-email',
@@ -101,8 +105,8 @@ def connect():
     # https://stackoverflow.com/questions/53566536/python-get-url-fragment-identifier-with-flask
 
     artist_track = session['artist_track']
-
-    return render_template("add_playlist_result.html", artist_track=artist_track)
+    playlist_name = session['playlist_name']
+    return render_template("add_playlist_result.html", artist_track=artist_track, playlist_name=playlist_name)
     #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
