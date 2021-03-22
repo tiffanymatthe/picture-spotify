@@ -264,13 +264,8 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     print(tracks)
     return 0
 
-<<<<<<< HEAD
 
 img = cv2.imread('south_africa.png')
-=======
-"""
-img = cv2.imread('red_1px.png')
->>>>>>> fe036fe7cf61ccbdbfcf2113af35640c59508f47
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 print(type(img))
@@ -296,7 +291,6 @@ else:
     npimage = img
 
 get_colour_array(npimage)
-<<<<<<< HEAD
 
 """
 npimg = np.fromstring(filestr, np.uint8)
@@ -311,6 +305,4 @@ for line in open("satfaces.txt"):
     colour_count_dict[colour] = colour
 
 print(colour_count_dict)
-=======
->>>>>>> fe036fe7cf61ccbdbfcf2113af35640c59508f47
 """
