@@ -1,5 +1,6 @@
 import deezer
 import os
+import random
 
 client = deezer.Client()
 
@@ -7,7 +8,7 @@ genre_id_dict = {
     "rock": 152,
     "country": 84,
     "folk": 466,
-    "reggae": 122,
+    "reggae": 144,
     "latin": 197,
     "blues": 153,
     "jazz": 129,
@@ -24,10 +25,12 @@ genre_id_dict = {
     "new age": 474,
 }
 
-genre = client.get_genre(152)
-chart = client.get_chart(relation=genre.get_relation(1))
-print(chart)
-
+# genre_id = something 
+genre = client.get_genre(197)
+radio = genre.get_radios()
+random_radio = random.choice(radio)
+radio_tracks = random_radio.get_tracks()
+print(radio_tracks)
 
 """
 #to get list of all genres and genre_id

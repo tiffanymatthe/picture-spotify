@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from math import sqrt, pow
 import sys, colorsys
+import random
 
 import spotipy
 import os
@@ -20,17 +21,17 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 
 # add colour-genre dictionary as a constant here
 COLOUR_GENRE = {
-    "red" : "Rock",
-    "green" : ["Country", "Folk"],
-    "yellow" : ["Reggae", "Latin"],
-    "blue" : ["Blues", "Jazz"],
-    "black" : "Metal",
-    "white" : ["Gospel", "Classical"],
-    "pink": "Pop",
-    "cyan" : ["Electronic", "Dance"],
-    "orange" : ["Soul", "r-n-b", "funk", "Hip-Hop"],
-    "brown" : "World Music",
-    "purple" : "New Age",
+    "red" : "rock",
+    "green" : "country",
+    "yellow" : "latin",
+    "blue" : "blues",
+    "black" : "metal",
+    "white" : "classical",
+    "pink": "pop",
+    "cyan" : "electronic",
+    "orange" : "hip-hop",
+    "brown" : "country",
+    "purple" : "new age",
 }
 
 def get_playlist(img: np.ndarray):
@@ -176,15 +177,15 @@ def get_colour_array(img: np.ndarray):
     print("colour_count_dict: ", colour_count_dict)
     print("perc_colour_dict: ", perc_colour_dict)
 
-    return 0
+    return perc_colour_dict
 
 
-def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
+def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
     """Converts a dictionary of weighted colours to a spotify playlist.
 
     Parameters
     ----------
-    colour_array : dict[str, float]
+   perc_colour_dict : dict[str, float]
         a dictionary of colour keys where their values represent the percent composition seen in the image.
     playlist_size : int
         number of songs in playlist.
@@ -198,30 +199,74 @@ def colours_to_playlist(colour_array: dict[str, float], playlist_size: int):
     genre_id_dict = {
     "rock": 152,
     "country": 84,
-    "folk": 466,
-    "reggae": 122,
+    #"folk": 466,
+    #"reggae": 144,
     "latin": 197,
     "blues": 153,
-    "jazz": 129,
+    #"jazz": 129,
     "metal": 464,
-    "gospel": 187,
+    #"gospel": 187,
     "classical": 98,
     "pop": 132,
     "electronic": 110,
-    "dance": 113,
-    "soul": 169,
-    "r-n-b": 165,
+    #"dance": 113,
+    #"soul": 169,
+    #"r-n-b": 165,
     "hip-hop": 116,
-    "world music": 484,
     "new age": 474,
     }
 
     for x in perc_colour_dict:
-        genre = COLOUR_GENRE[x]
+        genre_name = COLOUR_GENRE[x]
+        genre_id = genre_id_dict[genre_name]
+        print(x, ":", genre_id)
+        genre = client.get_genre(genre_id)
+        radios = genre.get_radios()
+        if (len(radios) == 0):
+            continue
+        random_radio = random.choice(radios)
+        radio_tracks = random_radio.get_tracks()
+        number_of_radio_tracks = len(radio_tracks)
+        while (number_of_radio_tracks < 10):
+            random_radio = random.choice(radio)
+            radio_tracks = random_radio.get_tracks(limit=1)
+        print(radio_tracks)
+        """
+        random_radio = random.choice(radios)
+        radio_tracks = random_radio.get_tracks()
+        number_of_radio_tracks = len(radio_tracks)
+        print(random_radio, number_of_radio_tracks)
+        genre = client.get_genre(genre_id)
+        radio = genre.get_radios()
+        random_radio = random.choice(radio)
+        radio_tracks = random_radio.get_tracks()
+        number_of_radio_tracks = len(radio_tracks)
+        print(random_radio, number_of_radio_tracks)
+        
+        genre = client.get_genre(genre_id)
+        radio = genre.get_radios()
+        random_radio = random.choice(radio)
+        radio_tracks = random_radio.get_tracks()
+        number_of_radio_tracks = len(radio_tracks)
+        while (number_of_radio_tracks < 10):
+            random_radio = random.choice(radio)
+            radio_tracks = random_radio.get_tracks()
+            number_of_radio_tracks = len(radio_tracks)
+            random_radio_tracks = random.choice(radio_tracks)
+            final_tracks = random_radio_tracks.get_tracks()
+            print(final_tracks)
+        """
+        """
         genre_id = genre_id_dict[genre]
         artists = genre.get_artists()
         print(artists)
-        
+            
+        genre = client.get_genre(197)
+        radio = genre.get_radios()
+        random_radio = random.choice(radio)
+        radio_tracks = random_radio.get_tracks()
+        print(radio_tracks)
+        """
 
 
     return 0
@@ -252,7 +297,9 @@ if ((width * height) > 1000):
 else:
     npimage = img
 
-get_colour_array(npimage)
+perc_colour_dict = get_colour_array(npimage)
+
+colours_to_playlist(perc_colour_dict, 10)
 
 """
 npimg = np.fromstring(filestr, np.uint8)
