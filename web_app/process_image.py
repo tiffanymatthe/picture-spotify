@@ -17,7 +17,8 @@ client = deezer.Client()
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-
+img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
+         
 
 # add colour-genre dictionary as a constant here
 COLOUR_GENRE = {
@@ -47,14 +48,29 @@ def get_playlist(img: np.ndarray):
     dict [str, str]
         a dictionary with keys as artists and values as their track
     """
-    # colour_array = get_colour_array(img)
-    playlist_size = 10
-    # return colours_to_playlist(colour_array, playlist_size)
-    return {
-        'Tove Lo': 'Habits (Stay High)',
-        'Julia Michaels': 'Issues',
-        'Astrid S': 'It\'s Ok If You Forget Me'
-    }
+    # img = cv2.imread('south_africa.png')
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    height, width, _ = img.shape
+
+    if ((width * height) > 1000):
+        biggest_dim = height
+        if (width > height):
+            biggest_dim = width
+        biggest_pixels = 40
+        scale = int(biggest_dim / biggest_pixels)
+        resized_img = cv2.resize(img, dsize=(int(width/scale), int(height/scale)), interpolation=cv2.INTER_CUBIC)
+        cv2.imwrite("test_resizecv2.png", cv2.cvtColor(resized_img, cv2.COLOR_RGB2BGR))
+
+        npimage = np.asarray(resized_img)
+        #print(resized_img)
+        print(npimage.shape)
+    else:
+        npimage = img
+
+    perc_colour_dict = get_colour_array(npimage)
+
+    return colours_to_playlist(perc_colour_dict, 10)
 
 def get_colour_array(img: np.ndarray):
     """Converts an image array with rgb values to a dictionary of discrete colors.
@@ -216,68 +232,89 @@ def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
     "new age": 474,
     }
 
+    playlist_dict = {}
+
     for x in perc_colour_dict:
         genre_name = COLOUR_GENRE[x]
         genre_id = genre_id_dict[genre_name]
         genre = client.get_genre(genre_id)
         radios = genre.get_radios()
+        
         if (len(radios) == 0):
-            print("no radio stations for the following genre:", genre_name)
+            print("no radio for the following genre:", genre_name)
             continue
-        print("out of loop")
         #define number of tracks to print
         random_radio = random.choice(radios)
-        radio_tracks = random_radio.get_tracks()
-        number_of_radio_tracks = len(radio_tracks)
+        number_of_radio_tracks = 0
+        try:
+            radio_tracks = random_radio.get_tracks(limit=int(round(perc_colour_dict[x]*10)))
+            number_of_radio_tracks = len(radio_tracks)
+        except ValueError:
+            print("Radio not accessible.")
         while_repeats = 0
         # print(x, ":", "genre id: ", genre_id, ".", "number of radio tracks: ",number_of_radio_tracks)
-        while (number_of_radio_tracks < 10):
+        while (number_of_radio_tracks < round(perc_colour_dict[x]*10)):
             while_repeats +=1
             if while_repeats > 100:
                 break
             random_radio = random.choice(radios)
-            radio_tracks = random_radio.get_tracks()
-        print(random_radio, radio_tracks)
-        """
+            try:
+                radio_tracks = random_radio.get_tracks(limit=int(round(perc_colour_dict[x]*10)))
+                number_of_radio_tracks = len(radio_tracks)
+            except ValueError:
+                print("Radio not accessible.")
+        if round(perc_colour_dict[x]*10) != 0:
+            for x in radio_tracks:
+                artist = x.get_artist()
+                playlist_dict[x] = artist
+    print(playlist_dict)
+
         
-        random_radio = random.choice(radios)
-        radio_tracks = random_radio.get_tracks()
-        number_of_radio_tracks = len(radio_tracks)
-        print(random_radio, number_of_radio_tracks)
-        genre = client.get_genre(genre_id)
-        radio = genre.get_radios()
-        random_radio = random.choice(radio)
-        radio_tracks = random_radio.get_tracks()
-        number_of_radio_tracks = len(radio_tracks)
-        print(random_radio, number_of_radio_tracks)
-        
-        genre = client.get_genre(genre_id)
-        radio = genre.get_radios()
-        random_radio = random.choice(radio)
-        radio_tracks = random_radio.get_tracks()
-        number_of_radio_tracks = len(radio_tracks)
-        while (number_of_radio_tracks < 10):
-            random_radio = random.choice(radio)
-            radio_tracks = random_radio.get_tracks()
-            number_of_radio_tracks = len(radio_tracks)
-            random_radio_tracks = random.choice(radio_tracks)
-            final_tracks = random_radio_tracks.get_tracks()
-            print(final_tracks)
-        """
-        """
-        genre_id = genre_id_dict[genre]
-        artists = genre.get_artists()
-        print(artists)
-            
-        genre = client.get_genre(197)
-        radio = genre.get_radios()
-        random_radio = random.choice(radio)
-        radio_tracks = random_radio.get_tracks()
-        print(radio_tracks)
-        """
+    """
 
 
-    return 0
+    print(x, ":", round(perc_colour_dict[x]*10), random_radio, radio_tracks)
+    
+    print(round(perc_colour_dict[x]*10))
+    limit=int(round(perc_colour_dict[x]*10))
+    random_radio = random.choice(radios)
+    radio_tracks = random_radio.get_tracks()
+    number_of_radio_tracks = len(radio_tracks)
+    print(random_radio, number_of_radio_tracks)
+    genre = client.get_genre(genre_id)
+    radio = genre.get_radios()
+    random_radio = random.choice(radio)
+    radio_tracks = random_radio.get_tracks()
+    number_of_radio_tracks = len(radio_tracks)
+    print(random_radio, number_of_radio_tracks)
+    
+    genre = client.get_genre(genre_id)
+    radio = genre.get_radios()
+    random_radio = random.choice(radio)
+    radio_tracks = random_radio.get_tracks()
+    number_of_radio_tracks = len(radio_tracks)
+    while (number_of_radio_tracks < 10):
+        random_radio = random.choice(radio)
+        radio_tracks = random_radio.get_tracks()
+        number_of_radio_tracks = len(radio_tracks)
+        random_radio_tracks = random.choice(radio_tracks)
+        final_tracks = random_radio_tracks.get_tracks()
+        print(final_tracks)
+    """
+    """
+    genre_id = genre_id_dict[genre]
+    artists = genre.get_artists()
+    print(artists)
+        
+    genre = client.get_genre(197)
+    radio = genre.get_radios()
+    random_radio = random.choice(radio)
+    radio_tracks = random_radio.get_tracks()
+    print(radio_tracks)
+    """
+
+
+    return playlist_dict
 
 
 img = cv2.imread('south_africa.png')
