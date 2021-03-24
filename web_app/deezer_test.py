@@ -87,5 +87,6 @@ print(random_radio, radio_tracks)
 38435
 31021
 37081
-radio_name = client.get_radio(37081)
-print(radio_name)
+radio_name = client.get_radio(38435)
+radio_tracks = radio_name.get_tracks()
+print(radio_name, radio_tracks)
