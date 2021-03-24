@@ -219,19 +219,27 @@ def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
     for x in perc_colour_dict:
         genre_name = COLOUR_GENRE[x]
         genre_id = genre_id_dict[genre_name]
-        print(x, ":", genre_id)
         genre = client.get_genre(genre_id)
         radios = genre.get_radios()
         if (len(radios) == 0):
+            print("no radio stations for the following genre:", genre_name)
             continue
+        print("out of loop")
+        #define number of tracks to print
         random_radio = random.choice(radios)
         radio_tracks = random_radio.get_tracks()
         number_of_radio_tracks = len(radio_tracks)
+        while_repeats = 0
+        # print(x, ":", "genre id: ", genre_id, ".", "number of radio tracks: ",number_of_radio_tracks)
         while (number_of_radio_tracks < 10):
-            random_radio = random.choice(radio)
-            radio_tracks = random_radio.get_tracks(limit=1)
-        print(radio_tracks)
+            while_repeats +=1
+            if while_repeats > 100:
+                break
+            random_radio = random.choice(radios)
+            radio_tracks = random_radio.get_tracks()
+        print(random_radio, radio_tracks)
         """
+        
         random_radio = random.choice(radios)
         radio_tracks = random_radio.get_tracks()
         number_of_radio_tracks = len(radio_tracks)

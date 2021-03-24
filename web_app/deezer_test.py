@@ -4,6 +4,7 @@ import random
 
 client = deezer.Client()
 
+"""
 genre_id_dict = {
     "rock": 152,
     "country": 84,
@@ -32,7 +33,6 @@ random_radio = random.choice(radio)
 radio_tracks = random_radio.get_tracks()
 print(radio_tracks)
 
-"""
 #to get list of all genres and genre_id
 for i in range(0,500):
     try:
@@ -61,4 +61,31 @@ print(os.urandom(24).hex())
 
     print(tracks)
 
+number = 0
+
+for number in range(11):
+    if number == 5:
+        continue    # break here
+
+    print('Number is ' + str(number))
+
+print('Out of loop')
+
+genre_id = "132"
+genre = client.get_genre(98)
+radios = genre.get_radios()
+if (len(radios) == 0):
+    print("no radio stations for the following genre:", genre_name)
+random_radio = random.choice(radios)
+radio_tracks = random_radio.get_tracks()
+print(random_radio, radio_tracks)
+
+
+
 """
+38235
+38435
+31021
+37081
+radio_name = client.get_radio(37081)
+print(radio_name)
