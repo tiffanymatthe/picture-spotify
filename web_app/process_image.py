@@ -4,23 +4,12 @@ import sys
 from math import sqrt, pow
 import sys, colorsys
 import random
-
-import spotipy
-import os
-from spotipy.oauth2 import SpotifyClientCredentials
-from spotipy.oauth2 import SpotifyOAuth
 from PIL import Image
-
 import deezer
+
 client = deezer.Client()
 
-auth_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(auth_manager=auth_manager)
-
-img = cv2.imdecode(npimg, cv2.IMREAD_UNCHANGED)
-         
-
-# add colour-genre dictionary as a constant here
+# Colours and their associated music genre. Based off "Associaing Colours with Musical Genres" by Jukka Holm , Antti Aaltonen & Harri Siirtola.
 COLOUR_GENRE = {
     "red" : "rock",
     "green" : "country",
@@ -48,9 +37,7 @@ def get_playlist(img: np.ndarray):
     dict [str, str]
         a dictionary with keys as artists and values as their track
     """
-    # img = cv2.imread('south_africa.png')
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
     height, width, _ = img.shape
 
     if ((width * height) > 1000):
@@ -63,7 +50,6 @@ def get_playlist(img: np.ndarray):
         cv2.imwrite("test_resizecv2.png", cv2.cvtColor(resized_img, cv2.COLOR_RGB2BGR))
 
         npimage = np.asarray(resized_img)
-        #print(resized_img)
         print(npimage.shape)
     else:
         npimage = img
@@ -84,29 +70,9 @@ def get_colour_array(img: np.ndarray):
     -------
     dict[str, float]
         a dictionary of colour keys where their values represent the percent composition seen in the image.
-    
-    #sample array to be removed later
-    height = 2 # number of rows
-    width = 4
-    img = np.zeros((height,width,3), np.uint8)
-    img[0][0] = np.array([255, 0, 0]) 
-    img[0][1] = np.array([0, 0, 255])
-    img[0][2] = np.array([165, 42, 42]) 
-    img[0][3] = np.array([0, 100, 100])
-    img[1][0] = np.array([255, 0, 0])
-    img[1][1] = np.array([0, 255, 0])
-    img[1][2] = np.array([161, 255, 66])
-    img[1][3] = np.array([209, 28, 0])
-    print(img)
-
     """
-    print("Number of dimensions of image: ", img.ndim)
     height, width, dx = img.shape
-    print("height: ", height)
-    print("value of third dimension: ", dx)
-    #HOW TO RESHAPE ANY IMAGE?
     newimg = img.reshape(height * width, 3)
-    #print("reshaped image:", newimg)
     
     colour_count_dict = {
         "red": 0,
@@ -122,7 +88,7 @@ def get_colour_array(img: np.ndarray):
         "purple": 0,
     }
 
-    colour_redirect_to_colour_count_dict = {
+    any_colour_to_main_colour = {
         'black': 'black',
         'dark green': 'green',
         'green': 'green',
@@ -161,7 +127,7 @@ def get_colour_array(img: np.ndarray):
         (r, g, b) = colorsys.hsv_to_rgb(h, 1, v)
 
         if (r != 0 and g != 0 and b != 0):
-            print("Faulty color!!!!!!!!!!!!!!!!")
+            print("Faulty color!")
 
         match = "[{}, {}, {}]".format(int(r), int(g), int(b))
 
@@ -171,7 +137,7 @@ def get_colour_array(img: np.ndarray):
             for line in open("satfaces.txt"):
                 if line.startswith(match):
                     colour = line.split("] ")[1].strip()
-                    redirected_colour = colour_redirect_to_colour_count_dict[colour]
+                    redirected_colour = any_colour_to_main_colour[colour]
                     colour_count_dict[redirected_colour] += 1
                     break
 
