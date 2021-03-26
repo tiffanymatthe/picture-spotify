@@ -53,7 +53,7 @@ Picture-Spotify Playlist Generator
         <th>Track</th>
         <th>Artist</th>
       </tr>
-      {% for artist, track in artist_track.items() %}
+      {% for track, artist in track_artist.items() %}
         <tr>
           <td><span class="has-text-weight-medium">{{ track }}</span></td>
           <td>{{ artist }}</td>
