@@ -112,6 +112,7 @@ https://github.com/spotify/web-api-auth-examples
             resolve(response.tracks.items[0].uri);
           } catch (error) {
             console.log("Track " + track + " of artist " + artist + " was not added.");
+            resolve("NONE");
           }
         }
       }
@@ -132,12 +133,13 @@ https://github.com/spotify/web-api-auth-examples
 
 async function getTrackURIs() {
   let trackURIs = [];
-  console.log("hello");
   var dict = {{ track_artist|tojson }};
   for (var track in dict) {
     try {
       let URI = await getTrackURIWithPromise(dict[track], track);
-      trackURIs.push(URI);
+      if (URI != "NONE") {
+        trackURIs.push(URI);
+      }
     } catch(err) {
       console.log("error:" + err);
     }
