@@ -129,10 +129,10 @@ https://github.com/spotify/web-api-auth-examples
 async function getTrackURIs() {
   let trackURIs = [];
   console.log("hello");
-  var dict = {{ artist_track|tojson }};
-  for (var artist in dict) {
+  var dict = {{ track_artist|tojson }};
+  for (var track in dict) {
     try {
-      let URI = await getTrackURIWithPromise(artist, dict[artist]);
+      let URI = await getTrackURIWithPromise(dict[track], track);
       trackURIs.push(URI);
     } catch(err) {
       console.log("error:" + err);
