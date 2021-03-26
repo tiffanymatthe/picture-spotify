@@ -8,6 +8,7 @@ import random
 from PIL import Image
 import deezer
 import ssl
+from pathlib import Path
 
 client = deezer.Client()
 
@@ -141,7 +142,7 @@ def get_colour_array(img: np.ndarray):
         if (match == '[255, 255, 255]'):
             colour_count_dict['white'] += 1
         else:
-            for line in open("satfaces.txt"):
+            for line in open("web_app/static/satfaces.txt"):
                 if line.startswith(match):
                     colour = line.split("] ")[1].strip()
                     redirected_colour = any_colour_to_main_colour[colour]
