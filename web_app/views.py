@@ -26,7 +26,7 @@ app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
 def home():
     if request.referrer is not None and "add_playlist_result" in request.referrer:
         [session.pop(key) for key in list(session.keys())]
-    artist_track = {"test": "hello", "fifk": "lhdskl jlskdjf sdfjs"}
+    artist_track = {}
     if request.method == 'POST':
         if request.form.get('save_playlist'):
             if session.get('file_added') is None:
@@ -76,18 +76,12 @@ def contact():
 
 @app.route("/auth")
 def auth():
-    state = ''.join(
-        secrets.choice(string.ascii_uppercase + string.digits) for _ in range(16)
-    )
-
     # Request authorization from user
-    # Only including `state` here for error logging purposes.
     payload = {
         'client_id': os.environ['SPOTIPY_CLIENT_ID'],
         'response_type': 'token',
         'redirect_uri': REDIRECT_URI,
-        'scope': 'user-read-private user-read-email',
-        'state': state,
+        'scope': 'playlist-modify-private',
     }
 
     res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
@@ -96,21 +90,17 @@ def auth():
 
 @app.route('/add_playlist_result')
 def connect():
-    # instead of this, redirect to home but check if no errors, then print success
     error = request.args.get('error')
     state = request.args.get('state')
 
     if error:
         print("ERROR")
-    # https://stackoverflow.com/questions/53566536/python-get-url-fragment-identifier-with-flask
 
     artist_track = session['artist_track']
     playlist_name = session['playlist_name']
     return render_template("add_playlist_result.html", artist_track=artist_track, playlist_name=playlist_name)
-    #return redirect(url_for('home'))
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
 
 def allowed_file(filename):
     return '.' in filename and \
