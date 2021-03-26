@@ -153,10 +153,10 @@ async function getTrackURIs() {
 
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200 || this.status == 201) {
-        document.getElementById('success_statement').style.display = 'block'; 
-        document.getElementById('fail_statement').style.display = 'none'; 
+        document.getElementsByClassName('success_statement').style.display = 'block'; 
+        document.getElementsByClassName('fail_statement').style.display = 'none'; 
       } else {
-        document.getElementById('fail_statement').style.display = 'block'; 
+        document.getElementsByClassName('fail_statement').style.display = 'block'; 
       }
     }
 
