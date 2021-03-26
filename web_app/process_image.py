@@ -213,7 +213,7 @@ def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
         random_radio = random.choice(radios)
         number_of_radio_tracks = 0
         try:
-            radio_tracks = random_radio.get_tracks(limit=int(round(perc_colour_dict[x]*10)))
+            radio_tracks = random_radio.get_tracks(limit=int(round(perc_colour_dict[x]*15)))
             number_of_radio_tracks = len(radio_tracks)
         except ValueError:
             print("Radio not accessible.")
