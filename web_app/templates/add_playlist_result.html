@@ -18,14 +18,14 @@ https://github.com/spotify/web-api-auth-examples
 </script>
 {% endraw %}
 
-<article class="message is-danger fail_statement" style="display:none">
+<article class="message is-danger" id="fail_statement" style="display:none">
   <div class="message-body">
     The playlist <i>{{playlist_name}}</i> was not saved. Try again.
 </article>
 
 {% raw %}
 <script id="playlist-template" type="text/x-handlebars-template" class="mb-3">
-  <div class="success_statement">The playlist <i>{{playlist_name}}</i> was successfully created.</div>
+  <div id="success_statement">The playlist <i>{{playlist_name}}</i> was successfully created.</div>
   <div>Check out your playlist <a href={{external_urls.spotify}} target="_blank">here</a>.</div>
 </script>
 {% endraw %}
@@ -155,10 +155,10 @@ async function getTrackURIs() {
 
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200 || this.status == 201) {
-        document.getElementsByClassName('success_statement').style.display = 'block'; 
-        document.getElementsByClassName('fail_statement').style.display = 'none'; 
+        document.getElementById('success_statement').style.display = 'block'; 
+        document.getElementById('fail_statement').style.display = 'none'; 
       } else {
-        document.getElementsByClassName('fail_statement').style.display = 'block'; 
+        document.getElementById('fail_statement').style.display = 'block'; 
       }
     }
 
