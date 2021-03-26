@@ -50,7 +50,7 @@ def get_playlist(img: np.ndarray):
         biggest_dim = height
         if (width > height):
             biggest_dim = width
-        biggest_pixels = 10
+        biggest_pixels = 40
         scale = int(biggest_dim / biggest_pixels)
         resized_img = cv2.resize(img, dsize=(
             int(width/scale), int(height/scale)), interpolation=cv2.INTER_CUBIC)
@@ -59,7 +59,11 @@ def get_playlist(img: np.ndarray):
     else:
         npimage = img
 
-    perc_colour_dict = get_colour_array(npimage * 255)
+    rgb_img = npimage * 255
+    rgb_img[rgb_img > 255] = 255
+    rgb_img[rgb_img < 0] = 0
+
+    perc_colour_dict = get_colour_array(rgb_img)
 
     return colours_to_playlist(perc_colour_dict, 10)
 
@@ -124,9 +128,15 @@ def get_colour_array(img: np.ndarray):
         'lime green': 'green',
     }
 
+    rgb_colours = {}
+    
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     path = os.path.join(__location__, "static", "satfaces.txt")
-    # path = (Path(__file__) / "../static/satfaces.txt").resolve()
+    for line in open(path):
+        split_line = line.split("] ")
+        rgb_value = split_line[0] + ']'
+        colour = split_line[1].strip()
+        rgb_colours[rgb_value] = colour
 
     for x in newimg:
         r = x[0]
@@ -144,12 +154,9 @@ def get_colour_array(img: np.ndarray):
         if (match == '[255, 255, 255]'):
             colour_count_dict['white'] += 1
         else:
-            for line in open(path):
-                if line.startswith(match):
-                    colour = line.split("] ")[1].strip()
-                    redirected_colour = any_colour_to_main_colour[colour]
-                    colour_count_dict[redirected_colour] += 1
-                    break
+            colour = rgb_colours[match]
+            redirected_colour = any_colour_to_main_colour[colour]
+            colour_count_dict[redirected_colour] += 1
 
     total_colour = sum(colour_count_dict.values())
     print("total_colours: ", total_colour)
