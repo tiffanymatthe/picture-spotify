@@ -108,7 +108,11 @@ https://github.com/spotify/web-api-auth-examples
           reject("Error, status code = " + xhr.status)
         } else {
           var response = JSON.parse(xhr.responseText);
-          resolve(response.tracks.items[0].uri);
+          try {
+            resolve(response.tracks.items[0].uri);
+          } catch (error) {
+            console.log("Track " + track + " of artist " + artist + " was not added.");
+          }
         }
       }
     }
