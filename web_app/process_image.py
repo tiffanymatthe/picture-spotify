@@ -53,15 +53,12 @@ def get_playlist(img: np.ndarray):
         scale = int(biggest_dim / biggest_pixels)
         resized_img = cv2.resize(img, dsize=(
             int(width/scale), int(height/scale)), interpolation=cv2.INTER_CUBIC)
-        cv2.imwrite("test_resizecv2.png", cv2.cvtColor(
-            resized_img, cv2.COLOR_RGB2BGR))
-
         npimage = np.asarray(resized_img)
         print(npimage.shape)
     else:
         npimage = img
 
-    perc_colour_dict = get_colour_array(npimage)
+    perc_colour_dict = get_colour_array(npimage * 255)
 
     return colours_to_playlist(perc_colour_dict, 10)
 
@@ -126,6 +123,8 @@ def get_colour_array(img: np.ndarray):
         'lime green': 'green',
     }
 
+    path = (Path(__file__) / "../static/satfaces.txt").resolve()
+
     for x in newimg:
         r = x[0]
         g = x[1]
@@ -142,7 +141,7 @@ def get_colour_array(img: np.ndarray):
         if (match == '[255, 255, 255]'):
             colour_count_dict['white'] += 1
         else:
-            for line in open("web_app/static/satfaces.txt"):
+            for line in open(path):
                 if line.startswith(match):
                     colour = line.split("] ")[1].strip()
                     redirected_colour = any_colour_to_main_colour[colour]
