@@ -9,6 +9,7 @@ from PIL import Image
 import deezer
 import ssl
 from pathlib import Path
+import os
 
 client = deezer.Client()
 
@@ -49,7 +50,7 @@ def get_playlist(img: np.ndarray):
         biggest_dim = height
         if (width > height):
             biggest_dim = width
-        biggest_pixels = 40
+        biggest_pixels = 10
         scale = int(biggest_dim / biggest_pixels)
         resized_img = cv2.resize(img, dsize=(
             int(width/scale), int(height/scale)), interpolation=cv2.INTER_CUBIC)
@@ -123,7 +124,9 @@ def get_colour_array(img: np.ndarray):
         'lime green': 'green',
     }
 
-    path = (Path(__file__) / "../static/satfaces.txt").resolve()
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    path = os.path.join(__location__, "static", "satfaces.txt")
+    # path = (Path(__file__) / "../static/satfaces.txt").resolve()
 
     for x in newimg:
         r = x[0]
