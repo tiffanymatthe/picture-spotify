@@ -28,16 +28,16 @@ COLOUR_GENRE = {
 }
 
 
-def get_playlist(img: np.ndarray):
+def get_playlist(img: np.ndarray) -> dict[str, str]:
     """Converts an image array with BGR values to a playlist
     Parameters
     ----------
     img : np.ndarray
-        The image where colour composition will be extracted from.
+        The image where colour composition will be extracted from. In BGR. Of size height x width x 3
     Returns
     -------
     dict [str, str]
-        a dictionary with keys as artists and values as their track
+        a dictionary with keys as artists and values as their track. Maximum size is 15.
     """
     scaled_img = np.float32(np.true_divide(img, 255.0))
     img = cv2.cvtColor(scaled_img, cv2.COLOR_BGR2RGB)
@@ -65,7 +65,7 @@ def get_playlist(img: np.ndarray):
     return colours_to_playlist(perc_colour_dict, 15)
 
 
-def get_colour_array(img: np.ndarray):
+def get_colour_array(img: np.ndarray) -> dict[str, float]:
     """Converts an image array with rgb values to a dictionary of discrete colors.
     Parameters
     ----------
@@ -174,35 +174,28 @@ def get_colour_array(img: np.ndarray):
     return perc_colour_dict
 
 
-def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
+def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int) -> dict[str, str]:
     """Converts a dictionary of weighted colours to a spotify playlist.
     Parameters
     ----------
    perc_colour_dict : dict[str, float]
         a dictionary of colour keys where their values represent the percent composition seen in the image.
     playlist_size : int
-        number of songs in playlist.
+        maximum number of songs in playlist.
     Returns
     -------
-    unknown type! Need to find out.
-        a playlist representing the colour distribution.
+    dict [str, str]
+        a dictionary with keys as artists and values as their track. Maximum size is playlist_size. Represents colour distribution.
     """
     genre_id_dict = {
         "rock": 152,
         "country": 84,
-        # "folk": 466,
-        # "reggae": 144,
         "latin": 197,
         "blues": 153,
-        # "jazz": 129,
         "metal": 464,
-        # "gospel": 187,
         "classical": 98,
         "pop": 132,
         "electronic": 110,
-        # "dance": 113,
-        # "soul": 169,
-        # "r-n-b": 165,
         "hip-hop": 116,
         "new age": 474,
     }
@@ -228,7 +221,6 @@ def colours_to_playlist(perc_colour_dict: dict[str, float], playlist_size: int):
         except ValueError:
             print("Radio not accessible.")
         while_repeats = 0
-        # print(x, ":", "genre id: ", genre_id, ".", "number of radio tracks: ",number_of_radio_tracks)
         while (number_of_radio_tracks < round(perc_colour_dict[x]*15)):
             while_repeats += 1
             if while_repeats > 100:
