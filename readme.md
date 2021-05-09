@@ -1,5 +1,7 @@
 # Picture Spotify
 
+The deployed Heroku website can be found [here](http://picture-spotify-app.herokuapp.com/). It takes about 10-20 seconds to load.
+
 ## How to Run
 
 1. Clone repository.
